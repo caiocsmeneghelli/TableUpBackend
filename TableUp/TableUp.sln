@@ -4,8 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36301.6 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableUp.API", "TableUp.API\TableUp.API.csproj", "{55B1F261-971A-4CE9-8A5D-AB67E2EB74AD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BA4989B-962A-46A2-9053-E2B8D1D970ED} = {1BA4989B-962A-46A2-9053-E2B8D1D970ED}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableUp.Domain", "TableUp.Domain\TableUp.Domain.csproj", "{A5EC21E9-2875-4EA4-86A6-B16009EEB9E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableUp.Application", "TableUp.Application\TableUp.Application.csproj", "{1BA4989B-962A-46A2-9053-E2B8D1D970ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{A5EC21E9-2875-4EA4-86A6-B16009EEB9E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5EC21E9-2875-4EA4-86A6-B16009EEB9E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5EC21E9-2875-4EA4-86A6-B16009EEB9E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BA4989B-962A-46A2-9053-E2B8D1D970ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BA4989B-962A-46A2-9053-E2B8D1D970ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BA4989B-962A-46A2-9053-E2B8D1D970ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BA4989B-962A-46A2-9053-E2B8D1D970ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

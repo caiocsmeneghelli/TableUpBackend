@@ -7,9 +7,9 @@ using TableUp.Domain.Enums;
 
 namespace TableUp.Domain.Entities
 {
-    public class FoodMenu : BaseEntity
+    public class MenuItem : BaseEntity
     {
-        public FoodMenu(string name, string description, FoodCategory category)
+        public MenuItem(string name, string description, MenuCategory category)
         {
             Name = name;
             Description = description;
@@ -19,7 +19,7 @@ namespace TableUp.Domain.Entities
 
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public FoodCategory Category { get; private set; }
+        public MenuCategory Category { get; private set; }
         public EStatus Status { get; private set; }
         //public string UrlImage { get; private set; }
 

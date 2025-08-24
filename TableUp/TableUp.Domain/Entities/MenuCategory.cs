@@ -2,12 +2,12 @@
 
 namespace TableUp.Domain.Entities
 {
-    public class FoodCategory : BaseEntity
+    public class MenuCategory : BaseEntity
     {
         public string Name { get; private set; }
         public EStatus Status { get; private set; }
 
-        public FoodCategory(string name)
+        public MenuCategory(string name)
         {
             Name = name;
             Status = EStatus.Active;
