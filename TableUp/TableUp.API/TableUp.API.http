@@ -1,0 +1,6 @@
+@TableUp.API_HostAddress = http://localhost:5253
+
+GET {{TableUp.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
