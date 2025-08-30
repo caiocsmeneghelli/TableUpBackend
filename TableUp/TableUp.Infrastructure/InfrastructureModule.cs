@@ -1,6 +1,7 @@
 ﻿using TableUp.Infrastructure.Persistence.Repositories;
-using TableUp.Domain.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using TableUp.Domain.Repositories;
 
 namespace TableUp.Infrastructure
 {
