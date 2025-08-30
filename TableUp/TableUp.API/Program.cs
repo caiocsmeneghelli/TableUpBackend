@@ -1,4 +1,5 @@
-using TableUp.Application.Commands.MenuCategories.Create;
+using TableUp.Application;
+using TableUp.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services
-    .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateMenuCategoryCommand).Assembly));
+builder.Services.AddApplication()
+    .AddInfrastructure();
 
 var app = builder.Build();
 
