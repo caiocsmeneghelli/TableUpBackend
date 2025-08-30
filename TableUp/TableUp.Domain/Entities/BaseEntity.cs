@@ -10,7 +10,7 @@ namespace TableUp.Domain.Entities
     {
         public BaseEntity()
         {
-            Guid = new Guid();
+            Guid = Guid.NewGuid();
             CreatedAt = DateTime.Now;
             UpdatedAt = DateTime.Now;
         }

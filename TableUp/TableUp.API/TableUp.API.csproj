@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TableUp.Application\TableUp.Application.csproj" />
+    <ProjectReference Include="..\TableUp.Infrastructure\TableUp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,12 +9,12 @@ namespace TableUp.Application.ViewModels.MenuItems
 {
     public class MenuItemViewModel
     {
-        private Guid Guid { get; set; }
-        private string Name { get; set; } = string.Empty;
-        private string Description { get; set; } = string.Empty;
-        private decimal Price { get; set; }
-        private Guid CategoryGuid { get; set; }
-        private string CategoryName { get; set; } = string.Empty;
+        public Guid Guid { get; private set; }
+        public string Name { get; private set; } = string.Empty;
+        public string Description { get; private set; } = string.Empty;
+        public decimal Price { get; private set; }
+        public Guid CategoryGuid { get; private set; }
+        public string CategoryName { get; private set; } = string.Empty;
 
         public void FromModel(MenuItem model)
         {
