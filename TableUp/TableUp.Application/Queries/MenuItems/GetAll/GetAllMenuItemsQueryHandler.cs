@@ -15,7 +15,7 @@ namespace TableUp.Application.Queries.MenuItems.GetAll
 
         public async Task<List<MenuItemViewModel>> Handle(GetAllMenuItemsQuery request, CancellationToken cancellationToken)
         {
-            var menuItems = await _repository.ListAllAsync();
+            var menuItems = await _repository.ListAllAsync(false);
             var menuVwItems = new List<MenuItemViewModel>();
             foreach (var item in menuItems)
             {

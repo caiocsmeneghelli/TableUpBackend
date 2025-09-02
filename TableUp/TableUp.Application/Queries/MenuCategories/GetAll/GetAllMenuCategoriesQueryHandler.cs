@@ -1,25 +1,21 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TableUp.Domain.Entities;
+using TableUp.Application.ViewModels.MenuCategories;
+using TableUp.Domain.Repositories;
 
 namespace TableUp.Application.Queries.MenuCategories.GetAll
 {
-    public class GetAllMenuCategoriesQueryHandler : IRequestHandler<GetAllMenuCategoriesQuery, List<MenuCategory>>
+    public class GetAllMenuCategoriesQueryHandler : IRequestHandler<GetAllMenuCategoriesQuery, List<MenuCategoryViewModel>>
     {
-        public Task<List<MenuCategory>> Handle(GetAllMenuCategoriesQuery request, CancellationToken cancellationToken)
+        private readonly IMenuCategoryRepository _menuCategoryRepository;
+        public GetAllMenuCategoriesQueryHandler(IMenuCategoryRepository menuCategoryRepository)
         {
-            var categories = new List<MenuCategory>
-            {
-                new MenuCategory("Appetizers"),
-                new MenuCategory("Main Course"),
-                new MenuCategory("Desserts"),
-                new MenuCategory("Beverages")
-            };
-            return Task.FromResult(categories);
+            _menuCategoryRepository = menuCategoryRepository;
+        }
+        public Task<List<MenuCategoryViewModel>> Handle(GetAllMenuCategoriesQuery request, CancellationToken cancellationToken)
+        {
+            var categories = _menuCategoryRepository.ListAllAsync(false);
+            var viewModels = categories.Result.Select(c => new MenuCategoryViewModel(c.Guid, c.Name)).ToList();
+            return Task.FromResult(viewModels);
         }
     }
 }

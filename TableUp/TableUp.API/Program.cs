@@ -1,5 +1,6 @@
 using TableUp.Application;
 using TableUp.Domain.Repositories;
+using TableUp.Infrastructure;
 using TableUp.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +21,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+var configuration = builder.Configuration;
+
 builder.Services.AddApplication()
-    .AddScoped<IMenuItemRepository, MenuItemRepository>();
+    .AddInfrastructure(configuration);
 
 var app = builder.Build();
 

@@ -42,8 +42,14 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IReadOnlyList<MenuItem>> ListAllAsync()
+        public async Task<IReadOnlyList<MenuItem>> ListAllAsync(bool active)
         {
+            if (active)
+            {
+                var activeItems = _menuItems.Where(c => c.Status == Domain.Enums.EStatus.Active).ToList();
+                return await Task.FromResult(activeItems.AsReadOnly());
+            }
+
             return await Task.FromResult(_menuItems.AsReadOnly());
         }
 
