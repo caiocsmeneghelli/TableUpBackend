@@ -1,9 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TableUp.Domain.Repositories;
 
 namespace TableUp.Application.Commands.MenuCategories.Delete
@@ -20,7 +15,7 @@ namespace TableUp.Application.Commands.MenuCategories.Delete
         public Task<bool> Handle(DeleteMenuCategoryCommand request, CancellationToken cancellationToken)
         {
             var menuCategory = _menuCategoryRepository.GetByIdAsync(request.Guid);
-            if (menuCategory == null)
+            if (menuCategory.Result == null)
             {
                 return Task.FromResult(false);
             }

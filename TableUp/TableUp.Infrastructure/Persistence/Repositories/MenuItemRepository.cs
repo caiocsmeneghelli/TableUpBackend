@@ -16,37 +16,48 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         static MenuItemRepository()
         {
             var menuCategory = new MenuCategory("Main Course");
+            menuCategory.Deactivate();
             var newCategory = new MenuCategory("Desserts");
 
             _menuItems = new List<MenuItem>
             {
-                new MenuItem("Spaghetti Bolognese", "Classic Italian pasta with meat sauce", menuCategory, 12.99m),
-                new MenuItem("Caesar Salad", "Crisp romaine lettuce with Caesar dressing", menuCategory, 8.99m),
-                new MenuItem("Margherita Pizza", "Fresh tomatoes, mozzarella, and basil", menuCategory, 10.99m),
-                new MenuItem("Tiramisu", "Coffee-flavored Italian dessert", newCategory, 6.99m)
+                new MenuItem("Spaghetti Bolognese", "Classic Italian pasta with meat sauce", menuCategory.Guid, menuCategory, 12.99m),
+                new MenuItem("Caesar Salad", "Crisp romaine lettuce with Caesar dressing", menuCategory.Guid, menuCategory, 8.99m),
+                new MenuItem("Margherita Pizza", "Fresh tomatoes, mozzarella, and basil", menuCategory.Guid, menuCategory, 10.99m),
+                new MenuItem("Tiramisu", "Coffee-flavored Italian dessert", newCategory.Guid, newCategory, 6.99m)
             };
         }
 
         public Task<MenuItem> AddAsync(MenuItem entity)
         {
-            throw new NotImplementedException();
+            _menuItems.Add(entity);
+            return Task.FromResult(entity);
         }
 
         public Task DeleteAsync(MenuItem entity)
         {
-            throw new NotImplementedException();
+            _menuItems.Remove(entity);
+
+            entity.Deactivate();
+
+            _menuItems.Add(entity);
+
+            return Task.CompletedTask;
         }
 
-        public Task<MenuItem> GetByIdAsync(Guid id)
+        public Task<MenuItem?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var item = _menuItems.FirstOrDefault(c => c.Guid == id);
+            return Task.FromResult(item);
         }
 
         public async Task<IReadOnlyList<MenuItem>> ListAllAsync(bool active)
         {
             if (active)
             {
-                var activeItems = _menuItems.Where(c => c.Status == Domain.Enums.EStatus.Active).ToList();
+                var activeItems = _menuItems.Where(c => c.Status == Domain.Enums.EStatus.Active)
+                .Where(c => c.Category.Status == Domain.Enums.EStatus.Active)
+                .ToList();
                 return await Task.FromResult(activeItems.AsReadOnly());
             }
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.MenuCategories.Create;
+using TableUp.Application.Commands.MenuCategories.Delete;
 using TableUp.Application.Queries.MenuCategories.GetAll;
 using TableUp.Application.Queries.MenuCategories.GetByGuid;
 using TableUp.Application.ViewModels.MenuCategories;
@@ -48,6 +49,10 @@ namespace TableUp.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            DeleteMenuCategoryCommand command = new DeleteMenuCategoryCommand(id);
+            bool deleted = await _mediator.Send(command);
+
+            if (!deleted) { return NotFound(); }
 
             return NoContent();
         }

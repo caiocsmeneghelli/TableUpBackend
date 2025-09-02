@@ -21,12 +21,19 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public Task DeleteAsync(MenuCategory entity)
         {
-            throw new NotImplementedException();
+            _menuCategories.Remove(entity);
+
+            entity.Deactivate();
+
+            _menuCategories.Add(entity);
+
+            return Task.CompletedTask;
         }
 
-        public Task<MenuCategory> GetByIdAsync(Guid id)
+        public Task<MenuCategory?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var category = _menuCategories.FirstOrDefault(c => c.Guid == id);
+            return Task.FromResult(category);
         }
 
         public Task<IReadOnlyList<MenuCategory>> ListAllAsync(bool active)

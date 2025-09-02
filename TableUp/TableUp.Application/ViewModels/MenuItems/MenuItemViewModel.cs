@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TableUp.Domain.Entities;
+using TableUp.Domain.Enums;
 
 namespace TableUp.Application.ViewModels.MenuItems
 {
@@ -15,6 +16,7 @@ namespace TableUp.Application.ViewModels.MenuItems
         public decimal Price { get; private set; }
         public Guid CategoryGuid { get; private set; }
         public string CategoryName { get; private set; } = string.Empty;
+        public EStatus Status { get; private set; }
 
         public void FromModel(MenuItem model)
         {
@@ -22,8 +24,9 @@ namespace TableUp.Application.ViewModels.MenuItems
             Name = model.Name;
             Description = model.Description;
             Price = model.Value;
-            CategoryGuid = model.Category.Guid;
-            CategoryName = model.Category.Name;
+            CategoryGuid = model.CategoryGuid;
+            CategoryName = model.Category != null ? model.Category.Name : string.Empty;
+            Status = model.Status;
         }
     }
 }
