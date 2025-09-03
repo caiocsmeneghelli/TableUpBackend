@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.MenuItems.Create;
 using TableUp.Application.Queries.MenuItems.GetAll;
 using TableUp.Application.Queries.MenuItems.GetAllActive;
+using TableUp.Application.Queries.MenuItems.GetByGuid;
 
 namespace TableUp.API.Controllers
 {
@@ -40,6 +41,14 @@ namespace TableUp.API.Controllers
             var result = await _mediator.Send(command);
             // return CreatedAtAction(nameof(GetById), new { id = result.Guid }, result);
             return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var query = new GetMenuItemByGuidQuery(id);
+            var menuItem = await _mediator.Send(query);
+            return Ok(menuItem);
         }
     }
 }
