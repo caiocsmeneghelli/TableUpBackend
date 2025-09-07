@@ -46,5 +46,13 @@ namespace TableUp.Domain.Entities
         {
             Status = EStatus.Active;
         }
+
+        public void Update(string name, string description, Guid categoryGuid, decimal value)
+        {
+            Name = name;
+            Description = description;
+            CategoryGuid = categoryGuid;
+            Value = value;
+        }
     }
 }

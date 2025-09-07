@@ -16,7 +16,6 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         static MenuItemRepository()
         {
             var menuCategory = new MenuCategory("Main Course");
-            menuCategory.Deactivate();
             var newCategory = new MenuCategory("Desserts");
 
             _menuItems = new List<MenuItem>
@@ -66,7 +65,12 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public Task UpdateAsync(MenuItem entity)
         {
-            throw new NotImplementedException();
+            var index = _menuItems.FindIndex(c => c.Guid == entity.Guid);
+            if (index != -1)
+            {
+                _menuItems[index] = entity;
+            }
+            return Task.CompletedTask;
         }
     }
 }

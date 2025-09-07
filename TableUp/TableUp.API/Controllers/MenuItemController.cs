@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.MenuItems.Create;
 using TableUp.Application.Commands.MenuItems.Delete;
+using TableUp.Application.Commands.MenuItems.Update;
 using TableUp.Application.Queries.MenuItems.GetAll;
 using TableUp.Application.Queries.MenuItems.GetAllActive;
 using TableUp.Application.Queries.MenuItems.GetByGuid;
@@ -61,6 +62,14 @@ namespace TableUp.API.Controllers
             var command = new DeleteMenuItemCommand(id);
             var deleted = await _mediator.Send(command);
             return Ok(deleted) ;
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateMenuItemCommand command)
+        {
+            command.Guid = id;
+            var updated = await _mediator.Send(command);
+            return Ok(updated);
         }
     }
 }
