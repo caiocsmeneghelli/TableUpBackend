@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TableUp.Application.Commands.MenuCategories.Create;
+using FluentValidation;
 
 namespace TableUp.Application
 {
@@ -7,7 +8,8 @@ namespace TableUp.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddMediatr();
+            services.AddMediatr()
+                .AddValidators();
             return services;
         }
 
@@ -17,5 +19,10 @@ namespace TableUp.Application
             return services;
         }
 
+        private static IServiceCollection AddValidators(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<CreateMenuCategoryCommandValidator>();
+            return services;
+        }
     }
 }
