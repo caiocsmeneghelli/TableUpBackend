@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using TableUp.Application.Common;
 using TableUp.Domain.Repositories;
 
 namespace TableUp.Application.Commands.MenuCategories.Delete
 {
-    public class DeleteMenuCategoryCommandHandler : IRequestHandler<DeleteMenuCategoryCommand, bool>
+    public class DeleteMenuCategoryCommandHandler : IRequestHandler<DeleteMenuCategoryCommand, Result>
     {
         private readonly IMenuCategoryRepository _menuCategoryRepository;
 
@@ -12,15 +13,15 @@ namespace TableUp.Application.Commands.MenuCategories.Delete
             _menuCategoryRepository = menuCategoryRepository;
         }
 
-        public Task<bool> Handle(DeleteMenuCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteMenuCategoryCommand request, CancellationToken cancellationToken)
         {
-            var menuCategory = _menuCategoryRepository.GetByIdAsync(request.Guid);
-            if (menuCategory.Result == null)
+            var menuCategory = await _menuCategoryRepository.GetByIdAsync(request.Guid);
+            if (menuCategory == null)
             {
-                return Task.FromResult(false);
+                return Result.Failure("Menu category not found");
             }
-            _menuCategoryRepository.DeleteAsync(menuCategory.Result);
-            return Task.FromResult(true);
+            await _menuCategoryRepository.DeleteAsync(menuCategory);
+            return Result.Success();
         }
     }
 }

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TableUp.Application.Common;
 
 namespace TableUp.Application.Commands.MenuItems.Update
 {
-    public class UpdateMenuItemCommand : IRequest<bool>
+    public class UpdateMenuItemCommand : IRequest<Result>
     {
         public Guid Guid { get; set; }
         public string Name { get; set; } = string.Empty;

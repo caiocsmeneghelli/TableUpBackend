@@ -1,11 +1,12 @@
 using MediatR;
+using TableUp.Application.Common;
 using TableUp.Application.ViewModels.MenuItems;
 using TableUp.Domain.Entities;
 using TableUp.Domain.Repositories;
 
 namespace TableUp.Application.Commands.MenuItems.Create
 {
-    public class CreateMenuItemCommandHandler : IRequestHandler<CreateMenuItemCommand, MenuItemViewModel>
+    public class CreateMenuItemCommandHandler : IRequestHandler<CreateMenuItemCommand, Result>
     {
         private readonly IMenuItemRepository _repository;
 
@@ -14,7 +15,7 @@ namespace TableUp.Application.Commands.MenuItems.Create
             _repository = repository;
         }
 
-        public Task<MenuItemViewModel> Handle(CreateMenuItemCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateMenuItemCommand request, CancellationToken cancellationToken)
         {
             var menuItem = new MenuItem(
                 request.Name,
@@ -23,11 +24,12 @@ namespace TableUp.Application.Commands.MenuItems.Create
                 request.Price
             );
 
-            _repository.AddAsync(menuItem);
+            await _repository.AddAsync(menuItem);
 
             MenuItemViewModel vm = new MenuItemViewModel();
             vm.FromModel(menuItem);
-            return Task.FromResult(vm);
+            
+            return Result.Success(vm);
         }
     }
 }

@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TableUp.Application.Common;
 using TableUp.Domain.Repositories;
 
 namespace TableUp.Application.Commands.MenuItems.Delete
 {
-    public class DeleteMenuItemCommandHandler : IRequestHandler<DeleteMenuItemCommand, bool>
+    public class DeleteMenuItemCommandHandler : IRequestHandler<DeleteMenuItemCommand, Result>
     {
         private readonly IMenuItemRepository _menuItemRepository;
 
@@ -17,19 +18,19 @@ namespace TableUp.Application.Commands.MenuItems.Delete
             _menuItemRepository = menuItemRepository;
         }
 
-        public async Task<bool> Handle(DeleteMenuItemCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteMenuItemCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var itemMenu = await _menuItemRepository.GetByIdAsync(request.Guid);
-                if (itemMenu == null) return false;
+                if (itemMenu == null) return Result.Failure("Item não encontrado.");
 
                 await _menuItemRepository.DeleteAsync(itemMenu);
-                return true;
+                return Result.Success();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                return Result.Failure(ex.Message);
             }
         }
     }

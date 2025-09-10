@@ -1,9 +1,9 @@
 using MediatR;
-using TableUp.Application.ViewModels.MenuItems;
+using TableUp.Application.Common;
 
 namespace TableUp.Application.Commands.MenuItems.Create
 {
-    public class CreateMenuItemCommand : IRequest<MenuItemViewModel>
+    public class CreateMenuItemCommand : IRequest<Result>
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

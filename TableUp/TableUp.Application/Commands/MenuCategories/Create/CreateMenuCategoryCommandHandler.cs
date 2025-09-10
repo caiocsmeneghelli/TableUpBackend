@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TableUp.Application.Common;
 using TableUp.Domain.Entities;
 using TableUp.Domain.Repositories;
 
 namespace TableUp.Application.Commands.MenuCategories.Create
 {
-    public class CreateMenuCategoryCommandHandler : IRequestHandler<CreateMenuCategoryCommand, Guid>
+    public class CreateMenuCategoryCommandHandler : IRequestHandler<CreateMenuCategoryCommand, Result>
     {
         private readonly IMenuCategoryRepository _menuCategoryRepository;
 
@@ -18,12 +19,12 @@ namespace TableUp.Application.Commands.MenuCategories.Create
             _menuCategoryRepository = menuCategoryRepository;
         }
 
-        public Task<Guid> Handle(CreateMenuCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateMenuCategoryCommand request, CancellationToken cancellationToken)
         {
             MenuCategory menuCategory = new MenuCategory(request.Name);
-            _menuCategoryRepository.AddAsync(menuCategory);
+            await _menuCategoryRepository.AddAsync(menuCategory);
 
-            return Task.FromResult(menuCategory.Guid);
+            return Result.Success(menuCategory.Guid);
         }
     }
 }
