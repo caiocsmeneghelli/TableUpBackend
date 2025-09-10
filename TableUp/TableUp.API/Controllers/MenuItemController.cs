@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.MenuItems.Create;
 using TableUp.Application.Commands.MenuItems.Delete;
 using TableUp.Application.Commands.MenuItems.Update;
+using TableUp.Application.Common;
 using TableUp.Application.Queries.MenuItems.GetAll;
 using TableUp.Application.Queries.MenuItems.GetAllActive;
 using TableUp.Application.Queries.MenuItems.GetByGuid;
@@ -40,10 +41,12 @@ namespace TableUp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMenuItemCommand command)
         {
-            var result = await _mediator.Send(command);
+            Result result = await _mediator.Send(command);
+            if (result.IsFailure) { return BadRequest(result); }
+
             return CreatedAtAction(
                     nameof(GetById),            // Nome do método que recupera o recurso
-                    new { id = result },        // Rota com o id do recurso criado
+                    new { id = result.Value },        // Rota com o id do recurso criado
                     result                      // Corpo da resposta (pode ser o próprio objeto ou apenas o id)
                 );
         }
@@ -60,16 +63,21 @@ namespace TableUp.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteMenuItemCommand(id);
-            var deleted = await _mediator.Send(command);
-            return Ok(deleted) ;
+            Result result = await _mediator.Send(command);
+
+            if (result.IsFailure) { return BadRequest(result); }
+
+            return Ok(result) ;
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateMenuItemCommand command)
         {
             command.Guid = id;
-            var updated = await _mediator.Send(command);
-            return Ok(updated);
+            Result result = await _mediator.Send(command);
+
+            if (result.IsFailure) { return BadRequest(result); }
+            return Ok(result);
         }
     }
 }
