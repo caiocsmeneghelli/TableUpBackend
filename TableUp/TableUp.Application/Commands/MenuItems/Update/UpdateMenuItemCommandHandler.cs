@@ -8,15 +8,27 @@ namespace TableUp.Application.Commands.MenuItems.Update
     {
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly IMenuCategoryRepository _menuCategoryRepository;
-        public UpdateMenuItemCommandHandler(IMenuItemRepository menuItemRepository, IMenuCategoryRepository menuCategoryRepository)
+        private readonly UpdateMenuItemCommandValidator _validator;
+        public UpdateMenuItemCommandHandler(IMenuItemRepository menuItemRepository, 
+            IMenuCategoryRepository menuCategoryRepository, UpdateMenuItemCommandValidator validator)
         {
             _menuItemRepository = menuItemRepository;
             _menuCategoryRepository = menuCategoryRepository;
+            _validator = validator;
         }
         public async Task<Result> Handle(UpdateMenuItemCommand request, CancellationToken cancellationToken)
         {
             try
             {
+                var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    string errorMessage = string.Join("; ", errors);
+                    return Result.Failure(errorMessage);
+                }
+
+
                 var itemMenu = await _menuItemRepository.GetByIdAsync(request.Guid);
                 if (itemMenu == null) return Result.Failure("Menu item não encontrado") ;
 
