@@ -12,14 +12,14 @@ namespace TableUp.Application.Commands.MenuItems.Create
         public CreateMenuItemCommandValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("Name is required.")
-                .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
+                .NotEmpty().WithMessage("Nome é obrigatório.")
+                .MaximumLength(100).WithMessage("Nome não pode exceder 100 caracteres.");
             RuleFor(x => x.Description)
-                .MaximumLength(500).WithMessage("Description must not exceed 500 characters.");
+                .MaximumLength(500).WithMessage("Descrição não pode exceder 500 caracteres.");
             RuleFor(x => x.Price)
-                .GreaterThan(0).WithMessage("Price must be greater than zero.");
+                .GreaterThan(0).WithMessage("Preço precisa ser maior que 0.");
             RuleFor(x => x.CategoryGuid)
-                .NotEmpty().WithMessage("CategoryGuid is required.");
+                .NotEmpty().WithMessage("CategoryGuid é obrigatório.");
         }
     }
 }
