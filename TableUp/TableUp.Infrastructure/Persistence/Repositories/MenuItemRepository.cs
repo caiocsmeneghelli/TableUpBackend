@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,67 +11,50 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 {
     public class MenuItemRepository : IMenuItemRepository
     {
-        private static readonly List<MenuItem> _menuItems;
+        private readonly TableUpDbContext _dbContext;
 
-        // Static constructor to initialize the in-memory list with your sample data
-        static MenuItemRepository()
+        public MenuItemRepository(TableUpDbContext dbContext)
         {
-            var menuCategory = new MenuCategory("Main Course");
-            var newCategory = new MenuCategory("Desserts");
-
-            _menuItems = new List<MenuItem>
-            {
-                new MenuItem("Spaghetti Bolognese", "Classic Italian pasta with meat sauce", menuCategory.Guid, menuCategory, 12.99m),
-                new MenuItem("Caesar Salad", "Crisp romaine lettuce with Caesar dressing", menuCategory.Guid, menuCategory, 8.99m),
-                new MenuItem("Margherita Pizza", "Fresh tomatoes, mozzarella, and basil", menuCategory.Guid, menuCategory, 10.99m),
-                new MenuItem("Tiramisu", "Coffee-flavored Italian dessert", newCategory.Guid, newCategory, 6.99m)
-            };
+            _dbContext = dbContext;
         }
 
-        public Task<MenuItem> AddAsync(MenuItem entity)
+
+        public async Task<MenuItem> AddAsync(MenuItem entity)
         {
-            _menuItems.Add(entity);
-            return Task.FromResult(entity);
+            await _dbContext.MenuItems.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteAsync(MenuItem entity)
+        public async Task DeleteAsync(MenuItem entity)
         {
-            _menuItems.Remove(entity);
-
             entity.Deactivate();
-
-            _menuItems.Add(entity);
-
-            return Task.CompletedTask;
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<MenuItem?> GetByIdAsync(Guid id)
+        public async Task<MenuItem?> GetByIdAsync(Guid id)
         {
-            var item = _menuItems.FirstOrDefault(c => c.Guid == id);
-            return Task.FromResult(item);
+            return await _dbContext.MenuItems.SingleOrDefaultAsync(reg => reg.Guid == id);
         }
 
         public async Task<List<MenuItem>> ListAllAsync(bool active)
         {
             if (active)
             {
-                var activeItems = _menuItems.Where(c => c.Status == Domain.Enums.EStatus.Active)
+                return await _dbContext.MenuItems.Where(c => c.Status == Domain.Enums.EStatus.Active)
                 .Where(c => c.Category.Status == Domain.Enums.EStatus.Active)
-                .ToList();
-                return await Task.FromResult(activeItems.AsReadOnly());
+                .AsNoTracking()
+                .ToListAsync();
             }
 
-            return await Task.FromResult(_menuItems.AsReadOnly());
+            return await _dbContext.MenuItems
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public Task UpdateAsync(MenuItem entity)
+        public async Task UpdateAsync(MenuItem entity)
         {
-            var index = _menuItems.FindIndex(c => c.Guid == entity.Guid);
-            if (index != -1)
-            {
-                _menuItems[index] = entity;
-            }
-            return Task.CompletedTask;
+           await _dbContext.SaveChangesAsync();
         }
     }
 }
