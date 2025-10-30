@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using TableUp.Domain.Repositories;
+using TableUp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace TableUp.Infrastructure
 {
@@ -9,7 +11,9 @@ namespace TableUp.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddRepositories();
+            services.AddRepositories()
+                .AddDbContext(configuration);
+
             return services;
         }
 
@@ -18,6 +22,17 @@ namespace TableUp.Infrastructure
             // Register your repositories here
             services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
             services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+            return services;
+        }
+
+        private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<TableUpDbContext>(options =>
+            {
+                options.UseNpgsql(connectionString);
+            });
+
             return services;
         }
     }
