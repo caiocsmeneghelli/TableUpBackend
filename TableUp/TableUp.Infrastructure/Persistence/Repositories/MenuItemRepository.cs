@@ -50,7 +50,7 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             return Task.FromResult(item);
         }
 
-        public async Task<IReadOnlyList<MenuItem>> ListAllAsync(bool active)
+        public async Task<List<MenuItem>> ListAllAsync(bool active)
         {
             if (active)
             {

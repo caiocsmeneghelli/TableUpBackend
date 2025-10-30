@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using TableUp.Domain.Entities;
 using TableUp.Domain.Repositories;
 
@@ -6,50 +7,50 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 {
     public class MenuCategoryRepository : IMenuCategoryRepository
     {
-        private static readonly List<MenuCategory> _menuCategories = new();
-        static MenuCategoryRepository()
+        private readonly TableUpDbContext _dbContext;
+
+        public MenuCategoryRepository(TableUpDbContext dbContext)
         {
-            _menuCategories.Add(new MenuCategory("Main Course"));
-            _menuCategories.Add(new MenuCategory("Desserts"));
+            _dbContext = dbContext;
         }
 
-        public Task<MenuCategory> AddAsync(MenuCategory entity)
+        public async Task<MenuCategory> AddAsync(MenuCategory entity)
         {
-            _menuCategories.Add(entity);
-            return Task.FromResult(entity);
+            await _dbContext.MenuCategories.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteAsync(MenuCategory entity)
+        public async Task DeleteAsync(MenuCategory entity)
         {
-            _menuCategories.Remove(entity);
-
             entity.Deactivate();
-
-            _menuCategories.Add(entity);
-
-            return Task.CompletedTask;
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<MenuCategory?> GetByIdAsync(Guid id)
+        public async Task<MenuCategory?> GetByIdAsync(Guid id)
         {
-            var category = _menuCategories.FirstOrDefault(c => c.Guid == id);
-            return Task.FromResult(category);
+            var category = await _dbContext.MenuCategories.FirstOrDefaultAsync(c => c.Guid == id);
+            return category;
         }
 
-        public Task<IReadOnlyList<MenuCategory>> ListAllAsync(bool active)
+
+        public async Task<List<MenuCategory>> ListAllAsync(bool active)
         {
             if (active)
             {
-                var activeCategories = _menuCategories.Where(c => c.Status == Domain.Enums.EStatus.Active).ToList();
-                return Task.FromResult<IReadOnlyList<MenuCategory>>(new ReadOnlyCollection<MenuCategory>(activeCategories));
+                return await _dbContext.MenuCategories
+                    .Where(c => c.Status == Domain.Enums.EStatus.Active)
+                    .ToListAsync();
             }
 
-            return Task.FromResult<IReadOnlyList<MenuCategory>>(new ReadOnlyCollection<MenuCategory>(_menuCategories));
+            return await _dbContext.MenuCategories
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public Task UpdateAsync(MenuCategory entity)
+        public async Task UpdateAsync(MenuCategory entity)
         {
-            throw new NotImplementedException();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

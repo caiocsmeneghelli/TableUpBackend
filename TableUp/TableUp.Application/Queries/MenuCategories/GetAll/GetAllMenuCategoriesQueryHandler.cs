@@ -11,6 +11,7 @@ namespace TableUp.Application.Queries.MenuCategories.GetAll
         {
             _menuCategoryRepository = menuCategoryRepository;
         }
+
         public Task<List<MenuCategoryViewModel>> Handle(GetAllMenuCategoriesQuery request, CancellationToken cancellationToken)
         {
             var categories = _menuCategoryRepository.ListAllAsync(false);
