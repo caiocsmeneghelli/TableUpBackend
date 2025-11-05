@@ -43,12 +43,14 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             {
                 return await _dbContext.MenuItems.Where(c => c.Status == Domain.Enums.EStatus.Active)
                 .Where(c => c.Category.Status == Domain.Enums.EStatus.Active)
+                .Include(reg => reg.Category)
                 .AsNoTracking()
                 .ToListAsync();
             }
 
             return await _dbContext.MenuItems
                 .AsNoTracking()
+                .Include(reg =>  reg.Category)
                 .ToListAsync();
         }
 

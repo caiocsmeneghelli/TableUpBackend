@@ -12,8 +12,8 @@ namespace TableUp.Domain.Entities
         public BaseEntity()
         {
             Guid = Guid.NewGuid();
-            CreatedAt = DateTime.Now;
-            UpdatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
             Status = EStatus.Active;
         }
 
