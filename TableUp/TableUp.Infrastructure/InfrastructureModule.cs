@@ -22,6 +22,7 @@ namespace TableUp.Infrastructure
             // Register your repositories here
             services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
             services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             return services;
         }
 
