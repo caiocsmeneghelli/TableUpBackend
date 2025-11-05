@@ -12,6 +12,7 @@ namespace TableUp.Infrastructure.Persistence
     {
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<MenuCategory> MenuCategories { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
