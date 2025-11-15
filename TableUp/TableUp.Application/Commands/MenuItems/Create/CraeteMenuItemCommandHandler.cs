@@ -27,13 +27,7 @@ namespace TableUp.Application.Commands.MenuItems.Create
                 return Result.Failure(errorMessage);
             }
 
-            var menuItem = new MenuItem(
-                request.Name,
-                request.Description,
-                request.CategoryGuid,
-                request.Price
-            );
-
+            MenuItem menuItem = request.ToDomain();
             await _repository.AddAsync(menuItem);
 
             MenuItemViewModel vm = new MenuItemViewModel();
