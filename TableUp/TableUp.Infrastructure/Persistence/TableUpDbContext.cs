@@ -35,6 +35,15 @@ namespace TableUp.Infrastructure.Persistence
                       .HasForeignKey(e => e.CategoryGuid)
                       .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.Guid);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.PasswordHash).IsRequired().HasMaxLength(200);
+            });
         }
     }
 }

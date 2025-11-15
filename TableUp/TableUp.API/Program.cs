@@ -1,3 +1,4 @@
+using TableUp.API.Middleware;
 using TableUp.Application;
 using TableUp.Domain.Repositories;
 using TableUp.Infrastructure;
@@ -36,6 +37,8 @@ if (app.Environment.IsDevelopment())
 
 // Use CORS policy
 app.UseCors("AllowAll");
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();
 

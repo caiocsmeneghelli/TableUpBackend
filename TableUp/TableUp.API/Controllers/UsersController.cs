@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TableUp.Application.Commands.Users.Create;
 
 namespace TableUp.API.Controllers
 {
@@ -14,11 +15,11 @@ namespace TableUp.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet()]
-        public async Task<IActionResult> Get()
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
-            return Ok("UsersController is working!");
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
-        
     }
 }
