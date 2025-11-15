@@ -34,6 +34,13 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.Guid == id);
         }
 
+        public Task<User?> GetByUsernameAndPasswordHash(string username, string passwordHash)
+        {
+            return _dbContext.Users
+                .AsNoTracking()
+                .SingleOrDefaultAsync(u => u.Username == username && u.PasswordHash == passwordHash);
+        }
+
         public async Task<List<User>> ListAllAsync(bool active)
         {
             if (active)

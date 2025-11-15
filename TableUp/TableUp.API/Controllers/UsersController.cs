@@ -1,6 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using TableUp.Application.Commands.Users.Create;
+using TableUp.Application.Commands.Users.Login;
+using TableUp.Application.Common;
 
 namespace TableUp.API.Controllers
 {
@@ -19,6 +22,14 @@ namespace TableUp.API.Controllers
         public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
             var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginCommand command)
+        {
+            // Implement login logic here
+            Result result = await _mediator.Send(command);
             return Ok(result);
         }
     }
