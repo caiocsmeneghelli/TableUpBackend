@@ -17,7 +17,7 @@ namespace TableUp.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public string GenerateJwtToken(Guid userGuid, string userEmail)
+        public string GenerateJwtToken(Guid userGuid, string user)
         {
             var issuer = _configuration["Jwt:Issuer"];
             var audience = _configuration["Jwt:Audience"];
@@ -29,7 +29,7 @@ namespace TableUp.Infrastructure.Services
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userGuid.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, userEmail),
+                new Claim(JwtRegisteredClaimNames.PreferredUsername, user),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 

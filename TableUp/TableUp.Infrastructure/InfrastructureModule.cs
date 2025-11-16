@@ -6,6 +6,9 @@ using TableUp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using TableUp.Infrastructure.Services;
 using TableUp.Domain.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TableUp.Infrastructure
 {
@@ -15,6 +18,7 @@ namespace TableUp.Infrastructure
         {
             services.AddRepositories()
                 .AddServices()
+                .AddAuthentication(configuration)
                 .AddDbContext(configuration);
 
             return services;
@@ -32,6 +36,28 @@ namespace TableUp.Infrastructure
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthService, AuthService>();
+            return services;
+        }
+
+        private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                    };
+                });
             return services;
         }
 

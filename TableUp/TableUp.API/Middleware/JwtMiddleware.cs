@@ -48,11 +48,11 @@ namespace TableUp.API.Middleware
 
                 // Pega as claims
                 var userId = jwtToken.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
-                var email = jwtToken.Claims.First(c => c.Type == JwtRegisteredClaimNames.Email).Value;
+                var userName = jwtToken.Claims.First(c => c.Type == JwtRegisteredClaimNames.PreferredUsername).Value;
 
                 // Registra esses dados no HttpContext
                 context.Items["UserId"] = userId;
-                context.Items["UserEmail"] = email;
+                context.Items["UserName"] = userName;
             }
             catch
             {

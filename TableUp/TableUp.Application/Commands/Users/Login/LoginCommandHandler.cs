@@ -26,6 +26,7 @@ namespace TableUp.Application.Commands.Users.Login
             // validar usuário
 
             string passwordHash = _authService.HashPassword(request.Password);
+            request.Tratar();
             var user = await _userRepository.GetByUsernameAndPasswordHash(request.Username, passwordHash);
 
             if(user == null)

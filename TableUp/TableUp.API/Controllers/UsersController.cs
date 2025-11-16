@@ -25,7 +25,7 @@ namespace TableUp.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(LoginCommand command)
         {
             // Implement login logic here
