@@ -41,6 +41,7 @@ namespace TableUp.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateMenuItemCommand command)
         {
             Result result = await _mediator.Send(command);
@@ -62,6 +63,7 @@ namespace TableUp.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteMenuItemCommand(id);
@@ -73,6 +75,7 @@ namespace TableUp.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateMenuItemCommand command)
         {
             command.Guid = id;

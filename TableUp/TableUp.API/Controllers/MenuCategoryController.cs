@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.MenuCategories.Create;
 using TableUp.Application.Commands.MenuCategories.Delete;
@@ -41,6 +41,7 @@ namespace TableUp.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateMenuCategoryCommand command)
         {
             Result result = await _mediator.Send(command);
@@ -50,6 +51,7 @@ namespace TableUp.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             DeleteMenuCategoryCommand command = new DeleteMenuCategoryCommand(id);
