@@ -6,10 +6,9 @@ namespace TableUp.Domain.Entities
     {
         public string Name { get; private set; }
 
-        public MenuCategory(string name)
+        public MenuCategory(string name, Guid userGuid): base(userGuid)
         {
             Name = name;
         }
-
     }
 }

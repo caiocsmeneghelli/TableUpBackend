@@ -9,12 +9,14 @@ namespace TableUp.Domain.Entities
 {
     public abstract class BaseEntity
     {
-        public BaseEntity()
+        public BaseEntity(Guid userGuid)
         {
             Guid = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
             Status = EStatus.Active;
+            CreatedByGuid = userGuid;
+            UpdatedByGuid = userGuid;
         }
 
         public Guid Guid { get; private set; }
@@ -22,8 +24,10 @@ namespace TableUp.Domain.Entities
         public DateTime UpdatedAt { get; private set; }
         public EStatus Status { get; private set; }
 
-        //public Guid CreatedBy { get; private set; }
-        //public Guid UpdatedBy { get; private set; }
+        public Guid CreatedByGuid { get; private set; }
+        public User CreatedBy { get; private set; }
+        public Guid UpdatedByGuid { get; private set; }
+        public User UpdatedBy { get; private set; }
 
         public void Deactivate()
         {

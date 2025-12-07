@@ -1,6 +1,6 @@
 namespace TableUp.Domain.Entities
 {
-    public class User: BaseEntity
+    public class User
     {
         public User(string name, string username, string email, string passwordHash)
         {
@@ -8,6 +8,8 @@ namespace TableUp.Domain.Entities
             Email = email;
             PasswordHash = passwordHash;
             Name = name;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
         }
 
         public string Name { get; private set; }
@@ -15,5 +17,9 @@ namespace TableUp.Domain.Entities
         public string Email { get; private set; }
         public string PasswordHash { get; private set; }
         public DateTime? LastLoginAt { get; private set; }
+
+        public DateTime CreatedAt { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
+
     }
 }
