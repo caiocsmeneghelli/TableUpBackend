@@ -24,7 +24,6 @@ namespace TableUp.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var query = new GetAllMenuItemsQuery();

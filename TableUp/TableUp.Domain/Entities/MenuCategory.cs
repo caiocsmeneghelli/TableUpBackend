@@ -6,6 +6,7 @@ namespace TableUp.Domain.Entities
     {
         public string Name { get; private set; }
 
+        // EF Core constructor
         private MenuCategory()
         { }
 

@@ -2,6 +2,9 @@
 {
     public class MenuItem : BaseEntity
     {
+        // EF Core constructor
+        private MenuItem()
+        { }
         public MenuItem(string name, string description, Guid categoryGuid, decimal value, Guid userGuid)
         {
             Name = name;
