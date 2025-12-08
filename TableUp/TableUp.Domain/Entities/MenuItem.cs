@@ -18,12 +18,14 @@
 
         //public string UrlImage { get; private set; }
 
-        public void Update(string name, string description, Guid categoryGuid, decimal value)
+        public void Update(string name, string description, Guid categoryGuid, decimal value, Guid userGuid)
         {
             Name = name;
             Description = description;
             CategoryGuid = categoryGuid;
             Value = value;
+
+            SetUpdated(userGuid);
         }
     }
 }

@@ -32,11 +32,19 @@ namespace TableUp.Domain.Entities
         public void Deactivate()
         {
             Status = EStatus.Inactive;
+            UpdatedAt = DateTime.UtcNow;
         }
 
         public void Activate()
         {
             Status = EStatus.Active;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void SetUpdated(Guid userGuid)
+        {
+            UpdatedAt = DateTime.UtcNow;
+            UpdatedByGuid = userGuid;
         }
     }
 }

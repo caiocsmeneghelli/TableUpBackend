@@ -18,6 +18,27 @@ namespace TableUp.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
+            var userType = typeof(User);
+            var baseEntityType = typeof(BaseEntity);
+
+            foreach (var et in modelBuilder.Model.GetEntityTypes()
+                         .Where(t => t.ClrType != null && baseEntityType.IsAssignableFrom(t.ClrType)))
+            {
+                var entity = modelBuilder.Entity(et.ClrType);
+
+                // configure foreign keys and navigation to User for CreatedBy / UpdatedBy
+                entity.HasOne(userType, "CreatedBy")
+                      .WithMany()
+                      .HasForeignKey("CreatedByGuid")
+                      .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(userType, "UpdatedBy")
+                      .WithMany()
+                      .HasForeignKey("UpdatedByGuid")
+                      .OnDelete(DeleteBehavior.NoAction);
+            }
+
+
             modelBuilder.Entity<MenuCategory>(entity =>
             {
                 entity.HasKey(e => e.Guid);
