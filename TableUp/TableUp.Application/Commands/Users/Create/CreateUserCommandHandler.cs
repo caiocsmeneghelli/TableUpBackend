@@ -1,8 +1,8 @@
 using MediatR;
 using TableUp.Application.Common;
+using TableUp.Application.Services;
 using TableUp.Domain.Entities;
 using TableUp.Domain.Repositories;
-using TableUp.Domain.Services;
 
 namespace TableUp.Application.Commands.Users.Create
 {

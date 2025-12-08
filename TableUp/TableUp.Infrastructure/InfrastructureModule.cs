@@ -5,10 +5,10 @@ using TableUp.Domain.Repositories;
 using TableUp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using TableUp.Infrastructure.Services;
-using TableUp.Domain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TableUp.Application.Services;
 
 namespace TableUp.Infrastructure
 {
@@ -36,6 +36,7 @@ namespace TableUp.Infrastructure
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             return services;
         }
 

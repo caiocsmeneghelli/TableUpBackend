@@ -1,12 +1,7 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TableUp.Application.Common;
+using TableUp.Application.Services;
 using TableUp.Domain.Repositories;
-using TableUp.Domain.Services;
 
 namespace TableUp.Application.Commands.Users.Login
 {

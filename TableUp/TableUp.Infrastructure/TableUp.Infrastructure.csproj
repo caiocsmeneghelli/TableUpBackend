@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TableUp.Application\TableUp.Application.csproj" />
     <ProjectReference Include="..\TableUp.Domain\TableUp.Domain.csproj" />
   </ItemGroup>
 

@@ -4,8 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using TableUp.Domain.Entities;
-using TableUp.Domain.Services;
+using TableUp.Application.Services;
 namespace TableUp.Infrastructure.Services
 {
     public class AuthService : IAuthService

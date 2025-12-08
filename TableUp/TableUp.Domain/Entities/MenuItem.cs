@@ -2,12 +2,13 @@
 {
     public class MenuItem : BaseEntity
     {
-        public MenuItem(string name, string description, Guid categoryGuid, decimal value, Guid userGuid) : base(userGuid)
+        public MenuItem(string name, string description, Guid categoryGuid, decimal value, Guid userGuid)
         {
             Name = name;
             Description = description;
             CategoryGuid = categoryGuid;
             Value = value;
+            SetCreated(userGuid);
         }
 
         public string Name { get; private set; }

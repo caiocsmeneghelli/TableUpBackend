@@ -6,9 +6,13 @@ namespace TableUp.Domain.Entities
     {
         public string Name { get; private set; }
 
-        public MenuCategory(string name, Guid userGuid): base(userGuid)
+        private MenuCategory()
+        { }
+
+        public MenuCategory(string name, Guid userGuid)
         {
             Name = name;
+            SetCreated(userGuid);
         }
     }
 }

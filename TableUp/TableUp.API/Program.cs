@@ -22,6 +22,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddHttpContextAccessor();
+
 var configuration = builder.Configuration;
 
 builder.Services.AddApplication()
