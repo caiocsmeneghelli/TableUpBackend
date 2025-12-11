@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.MenuItems.Create;
 using TableUp.Application.Commands.MenuItems.Delete;

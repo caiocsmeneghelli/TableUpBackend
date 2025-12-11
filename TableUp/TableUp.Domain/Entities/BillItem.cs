@@ -2,6 +2,13 @@ namespace TableUp.Domain.Entities
 {
     public class BillItem
     {
+        public BillItem(decimal quantity, Guid menuItemGuid, Guid orderBillGuid)
+        {
+            Quantity = (int)quantity;
+            MenuItemGuid = menuItemGuid;
+            OrderBillGuid = orderBillGuid;
+        }
+        
         public int Quantity { get; private set; }
         public Guid MenuItemGuid { get; private set; }
         public MenuItem MenuItem { get; private set; }
