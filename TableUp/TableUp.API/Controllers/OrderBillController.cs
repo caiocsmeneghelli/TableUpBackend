@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.OrderBills.Create;
+using TableUp.Application.Queries.OrderBills.GetToday;
 
 namespace TableUp.API.Controllers
 {
@@ -13,6 +14,14 @@ namespace TableUp.API.Controllers
         public OrderBillController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet("today")]
+        public async Task<IActionResult> GetTodayOrderBills()
+        {
+            var query = new GetOrderBillByDateQuery() { DateTime = DateTime.UtcNow };
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet("{guid}")]

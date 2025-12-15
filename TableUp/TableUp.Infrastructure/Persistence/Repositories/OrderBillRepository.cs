@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TableUp.Domain.Entities;
+using TableUp.Domain.Enums;
 using TableUp.Domain.Repositories;
 
 namespace TableUp.Infrastructure.Persistence.Repositories
@@ -36,7 +38,26 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public Task<List<OrderBill>> ListAllAsync(bool active)
         {
-            throw new NotImplementedException();
+            var query = _dbContext.OrderBills
+                .Include(reg => reg.CreatedBy)
+                .Include(reg => reg.UpdatedBy);
+            if(active)
+            {
+                return query.Where(reg => reg.Status == EStatus.Active).ToListAsync();
+            }
+
+            return query.ToListAsync();
+        }
+
+        public async Task<List<OrderBill>> ListByDateAsync(DateTime dateTime)
+        {
+            var startDate = dateTime.Date;
+            var endDate = startDate.AddDays(1);
+            return await _dbContext.OrderBills
+                .Where(ob => ob.CreatedAt >= startDate && ob.CreatedAt < endDate)
+                .Include(reg => reg.CreatedBy)
+                .Include(reg => reg.UpdatedBy)
+                .ToListAsync();
         }
 
         public Task UpdateAsync(OrderBill entity)

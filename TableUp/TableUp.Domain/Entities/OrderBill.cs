@@ -10,13 +10,24 @@ namespace TableUp.Domain.Entities
         {
             StatusOrderBill = EStatusOrderBill.Opened;
             BillItems = new List<OrderItem>();
-            TableNumber = tableNumber;
 
+            SetTableNumber(tableNumber);
             SetCreated(guidUser);
         }
         public decimal Amount { get; set; }
         public List<OrderItem> BillItems { get; private set; }
         public EStatusOrderBill StatusOrderBill { get; private set; }
         public string TableNumber { get; private set; }
+
+        private void SetTableNumber(string tableNumber)
+        {
+            if (string.IsNullOrWhiteSpace(tableNumber))
+                throw new ArgumentException("Código é obrigatório.");
+
+            if (!tableNumber.All(char.IsDigit))
+                throw new ArgumentException("Código deve conter apenas números.");
+
+            TableNumber = tableNumber.PadLeft(3, '0');
+        }
     }
 }
