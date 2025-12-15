@@ -30,6 +30,7 @@ namespace TableUp.Infrastructure
             services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
             services.AddScoped<IMenuItemRepository, MenuItemRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOrderBillRepository, OrderBillRepository>();
             return services;
         }
 

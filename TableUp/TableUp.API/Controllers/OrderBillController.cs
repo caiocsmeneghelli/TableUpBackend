@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TableUp.Application.Commands.OrderBills.Create;
 
 namespace TableUp.API.Controllers
 {
@@ -22,10 +23,10 @@ namespace TableUp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderBill()
+        public async Task<IActionResult> CreateOrderBill(CreateOrderBillCommand command)
         {
-            // Implementation to create a new OrderBill
-            return Ok();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpPut("{guid}/close")]

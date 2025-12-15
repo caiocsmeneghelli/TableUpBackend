@@ -13,6 +13,8 @@ namespace TableUp.Infrastructure.Persistence
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<MenuCategory> MenuCategories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<OrderBill> OrderBills { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -64,6 +66,29 @@ namespace TableUp.Infrastructure.Persistence
                 entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.PasswordHash).IsRequired().HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<OrderBill>(entity =>
+            {
+                entity.HasKey(e => e.Guid);
+                entity.Property(e => e.TableNumber).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Amount).IsRequired().HasColumnType("decimal(18,2)");
+                entity.Property(e => e.StatusOrderBill).IsRequired();
+
+                entity.HasMany(e => e.BillItems)
+                      .WithOne(e => e.OrderBill)
+                      .HasForeignKey(e => e.OrderBillGuid)
+                      .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.HasKey(e => e.Guid);
+                entity.Property(e => e.Quantity).IsRequired();
+                entity.HasOne(e => e.MenuItem)
+                      .WithMany()
+                      .HasForeignKey(e => e.MenuItemGuid)
+                      .OnDelete(DeleteBehavior.NoAction);
             });
         }
     }
