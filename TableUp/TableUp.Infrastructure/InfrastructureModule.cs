@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TableUp.Application.Services;
+using TableUp.Domain.UnitOfWork;
 
 namespace TableUp.Infrastructure
 {
@@ -18,6 +19,7 @@ namespace TableUp.Infrastructure
         {
             services.AddRepositories()
                 .AddServices()
+                .AddUnitOfWork()
                 .AddAuthentication(configuration)
                 .AddDbContext(configuration);
 
@@ -71,6 +73,12 @@ namespace TableUp.Infrastructure
                 options.UseNpgsql(connectionString);
             });
 
+            return services;
+        }
+
+        private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             return services;
         }
     }

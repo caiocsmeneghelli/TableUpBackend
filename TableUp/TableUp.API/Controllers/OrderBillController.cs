@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TableUp.Application.Commands.OrderBills.AddItem;
 using TableUp.Application.Commands.OrderBills.Close;
 using TableUp.Application.Commands.OrderBills.Create;
 using TableUp.Application.Common;
@@ -74,10 +75,16 @@ namespace TableUp.API.Controllers
         }
 
         [HttpPut("{guid}/add-item")]
-        public async Task<IActionResult> AddItemToOrderBill(Guid guid)
+        public async Task<IActionResult> AddItemToOrderBill(Guid guid, [FromBody] AddItemOrderBillCommand command)
         {
-            // Implementation to add an item to an OrderBill
-            return Ok();
+            command.GuidOrderBill = guid;
+            Result result = await _mediator.Send(command);
+            if(result.IsFailure)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }
