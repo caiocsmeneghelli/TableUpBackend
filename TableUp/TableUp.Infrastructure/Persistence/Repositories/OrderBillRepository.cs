@@ -33,7 +33,10 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public Task<OrderBill?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _dbContext.OrderBills
+                .Include(reg => reg.CreatedBy)
+                .Include(reg => reg.UpdatedBy)
+                .SingleOrDefaultAsync(ob => ob.Guid == id);
         }
 
         public Task<List<OrderBill>> ListAllAsync(bool active)

@@ -10,11 +10,11 @@ using TableUp.Domain.Repositories;
 
 namespace TableUp.Application.Queries.OrderBills.GetByDate
 {
-    public class GetOderBillByDateQueryHandler : IRequestHandler<GetOrderBillByDateQuery, List<OrderBillsViewModel>>
+    public class GetOrderBillByDateQueryHandler : IRequestHandler<GetOrderBillByDateQuery, List<OrderBillsViewModel>>
     {
         private readonly IOrderBillRepository _orderBillRepository;
 
-        public GetOderBillByDateQueryHandler(IOrderBillRepository orderBillRepository)
+        public GetOrderBillByDateQueryHandler(IOrderBillRepository orderBillRepository)
         {
             _orderBillRepository = orderBillRepository;
         }

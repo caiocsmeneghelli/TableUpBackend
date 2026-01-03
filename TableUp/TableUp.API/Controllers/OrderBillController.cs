@@ -1,12 +1,16 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.OrderBills.Create;
+using TableUp.Application.Queries.OrderBills.GetByGuid;
 using TableUp.Application.Queries.OrderBills.GetToday;
+using TableUp.Application.ViewModels.OrderBills;
 
 namespace TableUp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrderBillController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -27,8 +31,10 @@ namespace TableUp.API.Controllers
         [HttpGet("{guid}")]
         public async Task<IActionResult> GetByGuid(Guid guid)
         {
-            // Implementation to get OrderBill by guid
-            return Ok();
+            GetOrderBillByGuidQuery query = new GetOrderBillByGuidQuery(guid);
+            OrderBillsViewModel? orderBillsViewModel = await _mediator.Send(query);
+            if (orderBillsViewModel is null) { return NotFound(); }
+            return Ok(orderBillsViewModel);
         }
 
         [HttpPost]
