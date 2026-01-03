@@ -17,13 +17,13 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderBillRepository _orderBillRepository;
         private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IBillItemRepository _billItemRepository;
+        private readonly IOrderItemRepository _billItemRepository;
         private readonly ICurrentUserService _currentUserService;
 
         public AddItemOrderBillCommandHandler(IUnitOfWork unitOfWork,
             IOrderBillRepository orderBillRepository,
             IMenuItemRepository menuItemRepository,
-            IBillItemRepository billItemRepository,
+            IOrderItemRepository billItemRepository,
             ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
@@ -60,11 +60,10 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
             {
                 // salva orderItem
                 await _billItemRepository.AddAsync(orderItem);
-                await _unitOfWork.SaveChangesAsync();
 
                 // atualiza orderBill
                 orderBill.SetUpdated(userGuid);
-                await _unitOfWork.SaveChangesAsync();
+                await _orderBillRepository.UpdateAsync(orderBill);
 
                 await _unitOfWork.CommitAsync();
             }
