@@ -63,9 +63,9 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public Task UpdateAsync(OrderBill entity)
+        public async Task UpdateAsync(OrderBill entity)
         {
-            throw new NotImplementedException();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

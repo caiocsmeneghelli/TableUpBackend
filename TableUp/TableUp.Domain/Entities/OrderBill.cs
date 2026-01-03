@@ -29,5 +29,18 @@ namespace TableUp.Domain.Entities
 
             TableNumber = tableNumber.PadLeft(3, '0');
         }
+
+        public void CloseBill(Guid userGuid)
+        {
+            StatusOrderBill = EStatusOrderBill.Closed;
+            SetUpdated(userGuid);
+        }
+
+        public void Deactivate(Guid userGuid)
+        {
+            StatusOrderBill = EStatusOrderBill.Canceled;
+            Deactivate();
+            SetUpdated(userGuid);
+        }
     }
 }

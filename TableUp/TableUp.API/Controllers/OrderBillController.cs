@@ -1,10 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TableUp.Application.Commands.OrderBills.Close;
 using TableUp.Application.Commands.OrderBills.Create;
+using TableUp.Application.Common;
 using TableUp.Application.Queries.OrderBills.GetByGuid;
 using TableUp.Application.Queries.OrderBills.GetToday;
 using TableUp.Application.ViewModels.OrderBills;
+using TableUp.Domain.Enums;
 
 namespace TableUp.API.Controllers
 {
@@ -47,15 +50,27 @@ namespace TableUp.API.Controllers
         [HttpPut("{guid}/close")]
         public async Task<IActionResult> CloseOrderBill(Guid guid)
         {
-            // Implementation to close an OrderBill
-            return Ok();
+            CloseCancelOrderBillCommand command = new CloseCancelOrderBillCommand(guid, EStatusOrderBill.Closed);
+            Result result = await _mediator.Send(command);
+            if(result.IsFailure)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpPut("{guid}/cancel")]
         public async Task<IActionResult> CancelOrderBill(Guid guid)
         {
-            // Implementation to cancel an OrderBill
-            return Ok();
+            CloseCancelOrderBillCommand command = new CloseCancelOrderBillCommand(guid, EStatusOrderBill.Canceled);
+            Result result = await _mediator.Send(command);
+            if (result.IsFailure)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpPut("{guid}/add-item")]
