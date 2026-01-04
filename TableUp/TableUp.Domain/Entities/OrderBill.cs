@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TableUp.Domain.Enums;
 
 namespace TableUp.Domain.Entities
@@ -18,6 +21,8 @@ namespace TableUp.Domain.Entities
         public List<OrderItem> BillItems { get; private set; }
         public EStatusOrderBill StatusOrderBill { get; private set; }
         public string TableNumber { get; private set; }
+
+        public decimal Total => BillItems?.Sum(item => item.Quantity * (item.MenuItem?.Value ?? 0m)) ?? 0m;
 
         private void SetTableNumber(string tableNumber)
         {

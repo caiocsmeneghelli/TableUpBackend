@@ -43,8 +43,11 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         {
             var query = _dbContext.OrderBills
                 .Include(reg => reg.CreatedBy)
-                .Include(reg => reg.UpdatedBy);
-            if(active)
+                .Include(reg => reg.UpdatedBy)
+                .Include(reg => reg.BillItems)
+                    .ThenInclude(oi => oi.MenuItem);
+
+            if (active)
             {
                 return query.Where(reg => reg.Status == EStatus.Active).ToListAsync();
             }
@@ -60,6 +63,9 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 .Where(ob => ob.CreatedAt >= startDate && ob.CreatedAt < endDate)
                 .Include(reg => reg.CreatedBy)
                 .Include(reg => reg.UpdatedBy)
+                .Include(reg => reg.UpdatedBy)
+                .Include(reg => reg.BillItems)
+                    .ThenInclude(oi => oi.MenuItem)
                 .ToListAsync();
         }
 

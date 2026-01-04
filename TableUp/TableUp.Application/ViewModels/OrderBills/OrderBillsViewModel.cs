@@ -11,11 +11,13 @@ namespace TableUp.Application.ViewModels.OrderBills
     public class OrderBillsViewModel
     {
         public Guid GuidOrderBill { get; private set; }
-        public string TableNumber { get; private set; }
+        public string TableNumber { get; private set; } = string.Empty;
         public DateTime CreatedAt { get; private set; }
-        public string CratedBy { get; private set; }
+        public string CratedBy { get; private set; } = string.Empty;
 
         public EStatusOrderBill StatusOrderBill { get; private set; }
+        public decimal Total { get; private set; }
+        public List<OrderItemViewModel> Items { get; private set; } = new();
 
         public void FromEntity(OrderBill model)
         {
@@ -24,6 +26,13 @@ namespace TableUp.Application.ViewModels.OrderBills
             CreatedAt = model.CreatedAt.ToLocalTime();
             CratedBy = model.CreatedBy.Name;
             StatusOrderBill = model.StatusOrderBill;
+            Total = model.Total;
+            Items = model.BillItems?.Select(item =>
+            {
+                var viewModel = new OrderItemViewModel();
+                viewModel.FromEntity(item);
+                return viewModel;
+            }).ToList() ?? new();
         }
     }
 }
