@@ -26,7 +26,7 @@ namespace TableUp.Application.Commands.MenuItems.Delete
                 if (itemMenu == null) return Result.Failure("Item não encontrado.");
 
                 await _menuItemRepository.DeleteAsync(itemMenu);
-                return Result.Success();
+                return Result.Success(itemMenu.Guid);
             }
             catch (Exception ex)
             {

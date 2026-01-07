@@ -36,10 +36,7 @@ namespace TableUp.Application.Commands.MenuItems.Create
             MenuItem menuItem = request.ToDomain();
             await _repository.AddAsync(menuItem);
 
-            MenuItemViewModel vm = new MenuItemViewModel();
-            vm.FromModel(menuItem);
-            
-            return Result.Success(vm);
+            return Result.Success(menuItem.Guid);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace TableUp.Application.Commands.OrderBills.Create
             Guid userGuid = _currentUserService.UserId;
             var orderBill = new OrderBill(request.TableNumber, userGuid);
             await _orderBillRepository.AddAsync(orderBill);
-            return Result.Success(orderBill);
+            return Result.Success(orderBill.Guid);
         }
     }
 }

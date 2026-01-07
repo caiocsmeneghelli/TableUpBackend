@@ -18,7 +18,6 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-
         public async Task<MenuItem> AddAsync(MenuItem entity)
         {
             await _dbContext.MenuItems.AddAsync(entity);

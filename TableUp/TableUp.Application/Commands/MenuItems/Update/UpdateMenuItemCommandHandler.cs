@@ -42,7 +42,7 @@ namespace TableUp.Application.Commands.MenuItems.Update
 
                 itemMenu.Update(request.Name, request.Description, request.CategoryGuid, request.Value, userGuid);
                 await _menuItemRepository.UpdateAsync(itemMenu);
-                return Result.Success(itemMenu);
+                return Result.Success(itemMenu.Guid);
             }
             catch (Exception ex)
             {

@@ -26,9 +26,10 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             return entity;
         }
 
-        public Task DeleteAsync(OrderBill entity)
+        public async Task DeleteAsync(OrderBill entity)
         {
-            throw new NotImplementedException();
+            entity.Deactivate();
+            await _dbContext.SaveChangesAsync();
         }
 
         public Task<OrderBill?> GetByIdAsync(Guid id)

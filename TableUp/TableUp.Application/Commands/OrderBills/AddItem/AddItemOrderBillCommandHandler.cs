@@ -73,7 +73,7 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
                 return Result.Failure($"Error adding item to OrderBill: {ex.Message}");
             }
 
-            return Result.Success();
+            return Result.Success(orderItem.Guid);
         }
     }
 }
