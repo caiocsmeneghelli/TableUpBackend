@@ -19,23 +19,33 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly IOrderItemRepository _billItemRepository;
         private readonly ICurrentUserService _currentUserService;
+        private readonly AddItemOrderBillCommandValidator _validator;
 
         public AddItemOrderBillCommandHandler(IUnitOfWork unitOfWork,
             IOrderBillRepository orderBillRepository,
             IMenuItemRepository menuItemRepository,
             IOrderItemRepository billItemRepository,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            AddItemOrderBillCommandValidator validator)
         {
             _unitOfWork = unitOfWork;
             _orderBillRepository = orderBillRepository;
             _menuItemRepository = menuItemRepository;
             _billItemRepository = billItemRepository;
             _currentUserService = currentUserService;
+            _validator = validator;
         }
 
         public async Task<Result> Handle(AddItemOrderBillCommand request, CancellationToken cancellationToken)
         {
             // Add validations
+            var validationResult = _validator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                string errorMessage = string.Join("; ", errors);
+                return Result.Failure(errorMessage);
+            }
 
             // busca orderBill
             OrderBill? orderBill = await _orderBillRepository.GetByIdAsync(request.GuidOrderBill);
