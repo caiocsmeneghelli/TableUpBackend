@@ -21,6 +21,7 @@ namespace TableUp.Domain.Entities
         public List<OrderItem> BillItems { get; private set; }
         public EStatusOrderBill StatusOrderBill { get; private set; }
         public Table Table { get; private set; }
+        public Guid TableGuid { get; private set; }
 
         public decimal Total => BillItems?.Sum(item => item.Quantity * (item.MenuItem?.Value ?? 0m)) ?? 0m;
 
@@ -29,6 +30,7 @@ namespace TableUp.Domain.Entities
             if (table == null)
                 throw new ArgumentNullException(nameof(table), "A mesa não pode ser nula.");
             Table = table;
+            TableGuid = table.Guid;
         }
 
         public void CloseBill(Guid userGuid)

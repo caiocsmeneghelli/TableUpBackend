@@ -12,8 +12,9 @@ namespace TableUp.Domain.Entities
 
         public Table()
         { }
-        public Table(Guid userGuid)
+        public Table(Guid userGuid, string number)
         {
+            Number = number;
             SetCreated(userGuid);
         }
     }

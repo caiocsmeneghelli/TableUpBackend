@@ -54,6 +54,5 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Number == tableNumber);
         }
-
     }
 }

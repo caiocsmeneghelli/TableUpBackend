@@ -72,9 +72,14 @@ namespace TableUp.Infrastructure.Persistence
             modelBuilder.Entity<OrderBill>(entity =>
             {
                 entity.HasKey(e => e.Guid);
-                entity.Property(e => e.TableNumber).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.Amount).IsRequired().HasColumnType("decimal(18,2)");
                 entity.Property(e => e.StatusOrderBill).IsRequired();
+
+                entity.HasOne(e => e.Table)
+                    .WithMany() // ou .WithMany(t => t.OrderBills) se tiver navegação inversa
+                    .HasForeignKey(e => e.TableGuid)
+                    .OnDelete(DeleteBehavior.Restrict);
+
 
                 entity.HasMany(e => e.BillItems)
                       .WithOne(e => e.OrderBill)
@@ -90,6 +95,12 @@ namespace TableUp.Infrastructure.Persistence
                       .WithMany()
                       .HasForeignKey(e => e.MenuItemGuid)
                       .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<Table>(entity =>
+            {
+                entity.HasKey(e => e.Guid);
+                entity.Property(e => e.Number).IsRequired().HasMaxLength(5);
             });
         }
     }
