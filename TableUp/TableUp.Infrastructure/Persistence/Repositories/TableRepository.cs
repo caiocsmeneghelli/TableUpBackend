@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TableUp.Domain.Entities;
+using TableUp.Domain.Enums;
 using TableUp.Domain.Repositories;
 
 namespace TableUp.Infrastructure.Persistence.Repositories
@@ -38,7 +39,16 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public async Task<List<Table>> ListAllAsync(bool active)
         {
-            return await _dbContext.Tables.ToListAsync();
+            // Add apenas o createdBy para viewModel
+            if (active)
+                return await _dbContext.Tables
+                    .Where(reg => reg.Status == EStatus.Active)
+                    .Include(reg => reg.CreatedBy)
+                    .ToListAsync();
+
+            return await _dbContext.Tables
+                .Include(reg => reg.CreatedBy)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(Table entity)

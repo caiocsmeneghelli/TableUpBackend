@@ -22,7 +22,7 @@ namespace TableUp.Application.ViewModels.OrderBills
         public void FromEntity(OrderBill model)
         {
             GuidOrderBill = model.Guid;
-            TableNumber = model.TableNumber;
+            TableNumber = model.Table.Number;
             CreatedAt = model.CreatedAt.ToLocalTime();
             CratedBy = model.CreatedBy.Name;
             StatusOrderBill = model.StatusOrderBill;
