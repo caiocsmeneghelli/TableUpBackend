@@ -16,12 +16,14 @@ namespace TableUp.Application.Commands.OrderBills.Create
         private readonly IOrderBillRepository _orderBillRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly CreateOrderBillCommandValidator _validator;
+        private readonly ITableRepository _tableRepository;
 
-        public CreateOrderBillCommandHandler(IOrderBillRepository orderBillRepository, ICurrentUserService currentUserService, CreateOrderBillCommandValidator validator)
+        public CreateOrderBillCommandHandler(IOrderBillRepository orderBillRepository, ICurrentUserService currentUserService, CreateOrderBillCommandValidator validator, ITableRepository tableRepository)
         {
             _orderBillRepository = orderBillRepository;
             _currentUserService = currentUserService;
             _validator = validator;
+            _tableRepository = tableRepository;
         }
 
         public async Task<Result> Handle(CreateOrderBillCommand request, CancellationToken cancellationToken)
@@ -34,8 +36,21 @@ namespace TableUp.Application.Commands.OrderBills.Create
                 return Result.Failure(errorMessage);
             }
 
+
+            // adicionar usuario default para usuario nao logado
             Guid userGuid = _currentUserService.UserId;
-            var orderBill = new OrderBill(request.TableNumber, userGuid);
+
+            // busca table
+            var table = request.TableGuid != Guid.Empty
+                ? await _tableRepository.GetByIdAsync(request.TableGuid)
+                : await _tableRepository.GetByNumberAsync(request.TableNumber);
+
+            if(table == null)
+            {
+                return Result.Failure("Mesa não encontrada.");
+            }
+
+            var orderBill = new OrderBill(table, userGuid);
             await _orderBillRepository.AddAsync(orderBill);
             return Result.Success(orderBill.Guid);
         }

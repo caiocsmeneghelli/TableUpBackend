@@ -15,6 +15,7 @@ namespace TableUp.Infrastructure.Persistence
         public DbSet<User> Users { get; set; }
         public DbSet<OrderBill> OrderBills { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Table> Tables { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

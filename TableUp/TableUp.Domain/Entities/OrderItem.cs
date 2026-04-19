@@ -1,3 +1,5 @@
+using TableUp.Domain.Enums;
+
 namespace TableUp.Domain.Entities
 {
     public class OrderItem : BaseEntity
@@ -10,6 +12,7 @@ namespace TableUp.Domain.Entities
             Quantity = (int)quantity;
             MenuItemGuid = menuItemGuid;
             OrderBillGuid = orderBillGuid;
+            StatusOrderItem = EStatusOrderItem.Pending;
 
             SetCreated(userGuid);
         }
@@ -19,5 +22,6 @@ namespace TableUp.Domain.Entities
         public MenuItem MenuItem { get; private set; }
         public Guid OrderBillGuid { get; private set; }
         public OrderBill OrderBill { get; private set; }
+        public EStatusOrderItem StatusOrderItem { get; private set; }
     }
 }
