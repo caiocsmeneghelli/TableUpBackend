@@ -14,7 +14,6 @@ namespace TableUp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class OrderBillController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -25,6 +24,7 @@ namespace TableUp.API.Controllers
         }
 
         [HttpGet("today")]
+        [Authorize]
         public async Task<IActionResult> GetTodayOrderBills()
         {
             var query = new GetOrderBillByDateQuery() { DateTime = DateTime.UtcNow };

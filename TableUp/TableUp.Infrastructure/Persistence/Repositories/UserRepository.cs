@@ -59,5 +59,12 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         {
             await _dbContext.SaveChangesAsync();
         }
+
+        public User GetSystemUser()
+        {
+            return _dbContext.Users
+                .AsNoTracking()
+                .Single(u => u.Username == "Client User");
+        }
     }
 }
