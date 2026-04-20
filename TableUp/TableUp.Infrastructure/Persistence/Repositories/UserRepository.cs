@@ -64,7 +64,7 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         {
             return _dbContext.Users
                 .AsNoTracking()
-                .Single(u => u.Username == "Client User");
+                .Single(u => u.Username == "clientuser");
         }
     }
 }
