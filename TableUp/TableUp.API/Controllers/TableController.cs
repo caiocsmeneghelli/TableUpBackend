@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.Tables.Create;
@@ -10,6 +11,7 @@ namespace TableUp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TableController : ControllerBase
     {
         private readonly IMediator _mediatr;
