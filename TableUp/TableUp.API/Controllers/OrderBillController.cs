@@ -1,11 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TableUp.API.Requests.OrderBills;
 using TableUp.Application.Commands.OrderBills.AddItem;
 using TableUp.Application.Commands.OrderBills.Close;
 using TableUp.Application.Commands.OrderBills.Create;
 using TableUp.Application.Common;
 using TableUp.Application.Queries.OrderBills.GetByGuid;
+using TableUp.Application.Queries.OrderBills.GetByTableNumber;
 using TableUp.Application.Queries.OrderBills.GetToday;
 using TableUp.Application.ViewModels.OrderBills;
 using TableUp.Domain.Enums;
@@ -48,7 +50,7 @@ namespace TableUp.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("by-table/{tableNumber}")]
+        [HttpGet("/api/tables/{table-number}/order-bills")]
         public async Task<IActionResult> GetOrderBillByDate(string tableNumber)
         {
             var query = new GetOrderBillByTableNumberQuery() { TableNumber = tableNumber };
@@ -82,12 +84,15 @@ namespace TableUp.API.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{guid}/add-item")]
-        public async Task<IActionResult> AddItemToOrderBill(Guid guid, [FromBody] AddItemOrderBillCommand command)
+        [HttpPut("/api/tables/{tableNumber}/order-bills/items")]
+        public async Task<IActionResult> AddItemToOrderBill(string tableNumber, [FromBody] AddItemRequest request)
         {
-            command.GuidOrderBill = guid;
+            AddItemOrderBillCommand command = new AddItemOrderBillCommand();
+            command.TableNumber = tableNumber;
+            command.Items = request.Items;
+
             Result result = await _mediator.Send(command);
-            if(result.IsFailure)
+            if (result.IsFailure)
             {
                 return BadRequest(result);
             }

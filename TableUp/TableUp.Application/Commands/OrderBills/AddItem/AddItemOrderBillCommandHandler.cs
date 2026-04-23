@@ -18,6 +18,7 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
         private readonly IOrderBillRepository _orderBillRepository;
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly IOrderItemRepository _billItemRepository;
+        private readonly ITableRepository _tableRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly AddItemOrderBillCommandValidator _validator;
 
@@ -26,7 +27,8 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
             IMenuItemRepository menuItemRepository,
             IOrderItemRepository billItemRepository,
             ICurrentUserService currentUserService,
-            AddItemOrderBillCommandValidator validator)
+            AddItemOrderBillCommandValidator validator,
+            ITableRepository tableRepository)
         {
             _unitOfWork = unitOfWork;
             _orderBillRepository = orderBillRepository;
@@ -34,56 +36,54 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
             _billItemRepository = billItemRepository;
             _currentUserService = currentUserService;
             _validator = validator;
+            _tableRepository = tableRepository;
         }
 
         public async Task<Result> Handle(AddItemOrderBillCommand request, CancellationToken cancellationToken)
         {
             // Add validations
-            var validationResult = _validator.Validate(request);
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                string errorMessage = string.Join("; ", errors);
-                return Result.Failure(errorMessage);
-            }
+            //var validationResult = _validator.Validate(request);
+            //if (!validationResult.IsValid)
+            //{
+            //    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+            //    string errorMessage = string.Join("; ", errors);
+            //    return Result.Failure(errorMessage);
+            //}
 
-            // busca orderBill
-            OrderBill? orderBill = await _orderBillRepository.GetByIdAsync(request.GuidOrderBill);
-            if (orderBill is null)
-            {
-                return Result.Failure("OrderBill not found.");
-            }
-
-            // busca menuItem
-            MenuItem? menuItem = await _menuItemRepository.GetByIdAsync(request.GuidMenuItem);
-            if (menuItem is null)
-            {
-                return Result.Failure("MenuItem not found.");
-            }
-
-            // cria orderItem
-            Guid userGuid = _currentUserService.UserId;
-            OrderItem orderItem = new OrderItem(request.Quantity, menuItem.Guid, orderBill.Guid, userGuid);
-
-            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                // salva orderItem
-                await _billItemRepository.AddAsync(orderItem);
+                await _unitOfWork.BeginTransactionAsync();
+                // buscar orderBill, se não existir, criar um novo
+                var orderBill = await _orderBillRepository.GetByTableNumberAsync(request.TableNumber);
+                if (orderBill is null)
+                {
+                    Table? table = await _tableRepository.GetByNumberAsync(request.TableNumber);
+                    if (table is null)
+                    {
+                        return Result.Failure($"Table with number {request.TableNumber} not found.");
+                    }
 
-                // atualiza orderBill
-                orderBill.SetUpdated(userGuid);
-                await _orderBillRepository.UpdateAsync(orderBill);
+
+                    orderBill = new OrderBill(table, _currentUserService.UserId);
+                    await _orderBillRepository.AddAsync(orderBill);
+                }
+
+                // criar lista de orderItems
+                foreach (var item in request.Items)
+                {
+                    MenuItem? menuItem = await _menuItemRepository.GetByIdAsync(item.MenuItemGuid);
+                    var orderItem = new OrderItem(item.Quantity, menuItem.Guid, orderBill.Guid, _currentUserService.UserId);
+                    await _billItemRepository.AddAsync(orderItem);
+                }
 
                 await _unitOfWork.CommitAsync();
+                return Result.Success(orderBill.Guid);
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
-                return Result.Failure($"Error adding item to OrderBill: {ex.Message}");
+                return Result.Failure($"An error occurred while adding items to the order bill: {ex.Message}");
             }
-
-            return Result.Success(orderItem.Guid);
         }
     }
 }
