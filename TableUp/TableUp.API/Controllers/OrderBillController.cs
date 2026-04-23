@@ -48,6 +48,14 @@ namespace TableUp.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("by-table/{tableNumber}")]
+        public async Task<IActionResult> GetOrderBillByDate(string tableNumber)
+        {
+            var query = new GetOrderBillByTableNumberQuery() { TableNumber = tableNumber };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
         [HttpPut("{guid}/close")]
         public async Task<IActionResult> CloseOrderBill(Guid guid)
         {
