@@ -29,7 +29,7 @@ namespace TableUp.Domain.Entities
         {
             if (table == null)
                 throw new ArgumentNullException(nameof(table), "A mesa não pode ser nula.");
-            Table = table;
+            
             TableGuid = table.Guid;
         }
 

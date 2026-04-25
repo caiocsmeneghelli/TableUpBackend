@@ -73,7 +73,7 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 .Where(ob => ob.CreatedAt >= startDate && ob.CreatedAt < endDate)
                 .Include(reg => reg.CreatedBy)
                 .Include(reg => reg.UpdatedBy)
-                .Include(reg => reg.UpdatedBy)
+                .Include(reg => reg.Table)
                 .Include(reg => reg.BillItems)
                     .ThenInclude(oi => oi.MenuItem)
                 .ToListAsync();
