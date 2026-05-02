@@ -11,15 +11,24 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
     {
         public AddItemOrderBillCommandValidator()
         {
-            //RuleFor(reg => reg.GuidOrderBill)
-            //    .NotEmpty().WithMessage("Guid de conta não pode ser vazio.")
-            //    .NotEqual(Guid.Empty).WithMessage("Guid de conta inválido");
-            //RuleFor(reg => reg.GuidMenuItem)
-            //    .NotEmpty().WithMessage("Guid de item não pode ser vazio.")
-            //    .NotEqual(Guid.Empty).WithMessage("Guid de item inválido");
-            //RuleFor(reg => reg.Quantity)
-            //    .NotEmpty().WithMessage("Quantidade não pode ser vazio.")
-            //    .NotEqual(0).WithMessage("Quantidade precisa ser maior que zero.");
+            RuleFor(reg => reg.TableNumber)
+                .NotEmpty().WithMessage("Table number is required.")
+                .MaximumLength(3).WithMessage("Table number cannot exceed 3 characters.")
+                .Matches(@"^\d+$").WithMessage("Table number must be numeric.");
+
+            RuleFor(reg => reg.Items)
+                .NotNull().WithMessage("Items list cannot be null.")
+                .NotEmpty().WithMessage("At least one item must be provided.");
+
+            RuleForEach(reg => reg.Items)
+                .ChildRules(item =>
+                {
+                    item.RuleFor(i => i.MenuItemGuid)
+                        .NotEmpty().WithMessage("MenuItem GUID cannot be empty.");
+
+                    item.RuleFor(i => i.Quantity)
+                        .GreaterThan(0).WithMessage("Quantity must be greater than 0.");
+                });
         }
     }
 }

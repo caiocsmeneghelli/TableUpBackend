@@ -42,13 +42,16 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
         public async Task<Result> Handle(AddItemOrderBillCommand request, CancellationToken cancellationToken)
         {
             // Add validations
-            //var validationResult = _validator.Validate(request);
-            //if (!validationResult.IsValid)
-            //{
-            //    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-            //    string errorMessage = string.Join("; ", errors);
-            //    return Result.Failure(errorMessage);
-            //}
+            // verifica mesa
+            // verifica quantidade items
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                string errorMessage = string.Join("; ", errors);
+                return Result.Failure(errorMessage);
+            }
+
 
             try
             {
@@ -72,6 +75,12 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
                 foreach (var item in request.Items)
                 {
                     MenuItem? menuItem = await _menuItemRepository.GetByIdAsync(item.MenuItemGuid);
+                    if(menuItem is null)
+                    {
+                        await _unitOfWork.RollbackAsync();
+                        return Result.Failure($"Menu item with guid {item.MenuItemGuid} not found.");
+                    }
+
                     var orderItem = new OrderItem(item.Quantity, menuItem.Guid, orderBill.Guid, _currentUserService.UserId);
                     await _billItemRepository.AddAsync(orderItem);
                 }
