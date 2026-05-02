@@ -35,6 +35,7 @@ namespace TableUp.Domain.Entities
 
         public void CloseBill(Guid userGuid)
         {
+            Deactivate();
             StatusOrderBill = EStatusOrderBill.Closed;
             SetUpdated(userGuid);
         }
