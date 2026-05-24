@@ -16,6 +16,7 @@ namespace TableUp.Infrastructure.Persistence
         public DbSet<OrderBill> OrderBills { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Table> Tables { get; set; }
+        public DbSet<Restaurant> Restaurants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -95,12 +96,24 @@ namespace TableUp.Infrastructure.Persistence
                       .WithMany()
                       .HasForeignKey(e => e.MenuItemGuid)
                       .OnDelete(DeleteBehavior.NoAction);
+
             });
 
             modelBuilder.Entity<Table>(entity =>
             {
                 entity.HasKey(e => e.Guid);
                 entity.Property(e => e.Number).IsRequired().HasMaxLength(5);
+                entity.HasOne(e => e.Restaurant)
+                      .WithMany()
+                      .HasForeignKey(e => e.RestaurantGuid)
+                      .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<Restaurant>(entity =>
+            {
+                entity.HasKey(e => e.Guid);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Slug).IsRequired().HasMaxLength(100);
             });
         }
     }
