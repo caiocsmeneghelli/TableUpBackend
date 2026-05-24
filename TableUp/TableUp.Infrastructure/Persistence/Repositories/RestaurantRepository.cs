@@ -7,6 +7,12 @@ namespace TableUp.Infrastructure.Persistence.Repositories
     public class RestaurantRepository : IRestaurantRepository
     {
         private readonly TableUpDbContext _context;
+
+        public RestaurantRepository(TableUpDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<Restaurant> AddAsync(Restaurant entity)
         {
             await _context.Restaurants.AddAsync(entity);
@@ -27,8 +33,13 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public async Task<List<Restaurant>> ListAllAsync(bool active)
         {
-            return await _context.Restaurants.Where(r => r.Status == Domain.Enums.EStatus.Active)
-                .ToListAsync();
+            if (active)
+            {
+                return await _context.Restaurants.Where(r => r.Status == Domain.Enums.EStatus.Active)
+                    .ToListAsync();
+            }
+
+            return await _context.Restaurants.ToListAsync();
         }
 
         public async Task UpdateAsync(Restaurant entity)

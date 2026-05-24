@@ -1,9 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TableUp.Application.Queries.OrderBills.GetToday;
 using TableUp.Application.ViewModels.OrderBills;
 using TableUp.Domain.Repositories;
