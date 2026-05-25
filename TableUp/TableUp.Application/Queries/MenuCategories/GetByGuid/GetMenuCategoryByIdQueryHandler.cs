@@ -13,15 +13,15 @@ namespace TableUp.Application.Queries.MenuCategories.GetByGuid
             _menuCategoryRepository = menuCategoryRepository;
         }
 
-        public Task<MenuCategoryViewModel> Handle(GetMenuCategoryByGuidQuery request, CancellationToken cancellationToken)
+        public async Task<MenuCategoryViewModel> Handle(GetMenuCategoryByGuidQuery request, CancellationToken cancellationToken)
         {
-            var menuCategory = _menuCategoryRepository.GetByIdAsync(request.Guid);
-            if (menuCategory.Result == null)
+            var menuCategory = await _menuCategoryRepository.GetByIdAsync(request.Guid);
+            if (menuCategory == null)
             {
-                return Task.FromResult<MenuCategoryViewModel>(null);
+                return null;
             }
-            MenuCategoryViewModel menuCategoryViewModel = new MenuCategoryViewModel(menuCategory.Result.Guid, menuCategory.Result.Name, menuCategory.Result.Status);
-            return Task.FromResult(menuCategoryViewModel);
+            return new MenuCategoryViewModel(menuCategory.Guid, 
+                menuCategory.Name, menuCategory.Status, menuCategory.Restaurant);
         }
     }
 }

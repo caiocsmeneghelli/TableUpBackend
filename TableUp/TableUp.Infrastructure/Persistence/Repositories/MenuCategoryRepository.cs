@@ -29,7 +29,9 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public async Task<MenuCategory?> GetByIdAsync(Guid id)
         {
-            var category = await _dbContext.MenuCategories.FirstOrDefaultAsync(c => c.Guid == id);
+            var category = await _dbContext.MenuCategories
+                .Include(c => c.Restaurant)
+                .FirstOrDefaultAsync(c => c.Guid == id);
             return category;
         }
 
@@ -40,10 +42,13 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             {
                 return await _dbContext.MenuCategories
                     .Where(c => c.Status == Domain.Enums.EStatus.Active)
+                    .Include(c => c.Restaurant)
+                    .AsNoTracking()
                     .ToListAsync();
             }
 
             return await _dbContext.MenuCategories
+                .Include(c => c.Restaurant)
                 .AsNoTracking()
                 .ToListAsync();
         }
