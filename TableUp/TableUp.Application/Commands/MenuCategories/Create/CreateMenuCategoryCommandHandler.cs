@@ -37,7 +37,7 @@ namespace TableUp.Application.Commands.MenuCategories.Create
             }
 
             Guid guid = _currentUserService.UserId;
-            MenuCategory menuCategory = new MenuCategory(request.Name, guid);
+            MenuCategory menuCategory = new MenuCategory(request.Name, guid, request.RestaurantGuid);
             await _menuCategoryRepository.AddAsync(menuCategory);
 
             return Result.Success(menuCategory.Guid);

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TableUp.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TableUp.Infrastructure.Persistence;
 namespace TableUp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TableUpDbContext))]
-    partial class TableUpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260525002245_AddTableTokenForTable")]
+    partial class AddTableTokenForTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,9 +42,6 @@ namespace TableUp.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid>("RestaurantGuid")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -54,8 +54,6 @@ namespace TableUp.Infrastructure.Persistence.Migrations
                     b.HasKey("Guid");
 
                     b.HasIndex("CreatedByGuid");
-
-                    b.HasIndex("RestaurantGuid");
 
                     b.HasIndex("UpdatedByGuid");
 
@@ -347,12 +345,6 @@ namespace TableUp.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TableUp.Domain.Entities.Restaurant", "Restaurant")
-                        .WithMany()
-                        .HasForeignKey("RestaurantGuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TableUp.Domain.Entities.User", "UpdatedBy")
                         .WithMany()
                         .HasForeignKey("UpdatedByGuid")
@@ -360,8 +352,6 @@ namespace TableUp.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
-
-                    b.Navigation("Restaurant");
 
                     b.Navigation("UpdatedBy");
                 });

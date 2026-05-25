@@ -103,6 +103,7 @@ namespace TableUp.Infrastructure.Persistence
             {
                 entity.HasKey(e => e.Guid);
                 entity.Property(e => e.Number).IsRequired().HasMaxLength(5);
+                entity.Property(e => e.TableToken).IsRequired().HasMaxLength(8);
                 entity.HasOne(e => e.Restaurant)
                       .WithMany()
                       .HasForeignKey(e => e.RestaurantGuid)

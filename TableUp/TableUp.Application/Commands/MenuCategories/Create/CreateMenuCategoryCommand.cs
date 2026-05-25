@@ -6,5 +6,6 @@ namespace TableUp.Application.Commands.MenuCategories.Create
     public class CreateMenuCategoryCommand : IRequest<Result>
     {
         public string? Name { get; set; } = string.Empty;
+        public Guid RestaurantGuid { get; set; }
     }
 }
