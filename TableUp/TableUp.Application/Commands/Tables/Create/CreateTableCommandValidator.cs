@@ -15,6 +15,9 @@ namespace TableUp.Application.Commands.Tables.Create
                 .Length(1, 3).WithMessage("O número da mesa deve conter entre 1 e 3 caracteres.")
                 .Matches(@"^\d+$").WithMessage("O número da mesa deve conter apenas dígitos.")
                 .MustAsync(TableNumberMustBeUnique).WithMessage("Mesa {PropertyValue} já existe.");
+
+            RuleFor(x => x.RestaurantGuid)
+                .NotEmpty().WithMessage("O identificador do restaurante é obrigatório.");
         }
 
         private async Task<bool> TableNumberMustBeUnique(string tableNumber, CancellationToken cancellationToken)

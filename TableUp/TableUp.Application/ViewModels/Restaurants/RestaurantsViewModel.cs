@@ -16,4 +16,5 @@ namespace TableUp.Application.ViewModels.Restaurants
             Description = restaurant.Description;
             ImageUrl = restaurant.ImageUrl;
         }
+    }
 }

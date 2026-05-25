@@ -114,6 +114,8 @@ namespace TableUp.Infrastructure.Persistence
                 entity.HasKey(e => e.Guid);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Slug).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Description).HasMaxLength(500);
             });
         }
     }

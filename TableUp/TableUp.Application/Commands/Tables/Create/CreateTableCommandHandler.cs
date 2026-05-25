@@ -34,7 +34,7 @@ namespace TableUp.Application.Commands.Tables.Create
             // busca de usuario logado
             Guid userGuid = _currentUserService.UserId;
 
-            Table table = new Table(userGuid, request.TableNumber);
+            Table table = new Table(userGuid, request.RestaurantGuid, request.TableNumber);
             Table tableCreated = await _tableRepository.AddAsync(table);
             Guid tableGuid = tableCreated.Guid;
 

@@ -6,6 +6,7 @@ namespace TableUp.Application.Commands.Tables.Create
     public class CreateTableCommand : IRequest<Result>
     {
         public string TableNumber { get; set; } = string.Empty;
+        public Guid RestaurantGuid { get; set; }
 
         public void Normalize()
         {
