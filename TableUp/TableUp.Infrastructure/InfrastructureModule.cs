@@ -73,7 +73,9 @@ namespace TableUp.Infrastructure
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<TableUpDbContext>(options =>
             {
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(connectionString)
+                    .UseSnakeCaseNamingConvention();
+
             });
 
             return services;
