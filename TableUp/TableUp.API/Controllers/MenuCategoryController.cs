@@ -47,7 +47,7 @@ namespace TableUp.API.Controllers
             Result result = await _mediator.Send(command);
             if (result.IsFailure) { return BadRequest(result); }
 
-            return CreatedAtAction(nameof(GetByGuid), new { id = result.Value }, null);
+            return CreatedAtAction(nameof(GetByGuid), new { id = result.Value }, result);
         }
 
         [HttpDelete("{id}")]
