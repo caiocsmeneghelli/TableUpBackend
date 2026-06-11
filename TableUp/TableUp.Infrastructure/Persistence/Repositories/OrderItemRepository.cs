@@ -34,11 +34,14 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public async Task<OrderItem?> GetByIdAsync(Guid id) => await _dbContext.OrderItems.SingleOrDefaultAsync(oi => oi.Guid == id);
 
-        public async Task<List<OrderItem>> ListAllAsync(bool active)
+        public async Task<List<OrderItem>> ListAllAsync(bool pending)
         {
-            if (active)
+            if (pending)
             {
-                return await _dbContext.OrderItems.Where(oi => oi.Status == EStatus.Active).ToListAsync();
+                return await _dbContext.OrderItems
+                    .Where(oi => oi.Status == EStatus.Active)
+                    .Where(oi => oi.StatusOrderItem == EStatusOrderItem.Pending)
+                    .ToListAsync();
             }
 
             return await _dbContext.OrderItems.ToListAsync();

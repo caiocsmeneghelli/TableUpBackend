@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TableUp.Application.Queries.OrderItems.GetAll;
 using TableUp.Application.Queries.OrderItems.GetByGuid;
 
 namespace TableUp.API.Controllers
@@ -29,18 +30,20 @@ namespace TableUp.API.Controllers
 
         [HttpGet("pending")]
         [Authorize]
-        public async Task<IActionResult> GetPendingOrderItems()
+        public async Task<IActionResult> GetAllPendingOrderItems()
         {
-            // Implement the logic to get pending order items
-            return Ok();
+            GetAllOrderItemsQuery query = new GetAllOrderItemsQuery(true);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            // Implement the logic to get all order items
-            return Ok();
+            GetAllOrderItemsQuery query = new GetAllOrderItemsQuery(false);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpPut]
