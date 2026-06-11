@@ -14,7 +14,7 @@ using TableUp.Domain.Enums;
 
 namespace TableUp.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/order-bills")]
     [ApiController]
     public class OrderBillController : ControllerBase
     {

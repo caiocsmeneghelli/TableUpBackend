@@ -29,9 +29,7 @@ namespace TableUp.Application.ViewModels.OrderBills
             Total = model.Total;
             Items = model.BillItems?.Select(item =>
             {
-                var viewModel = new OrderItemViewModel();
-                viewModel.FromEntity(item);
-                return viewModel;
+                return new OrderItemViewModel(item);
             }).ToList() ?? new();
         }
     }

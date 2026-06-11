@@ -11,7 +11,7 @@ namespace TableUp.Application.ViewModels.OrderBills
         public string ItemMenuName { get; private set; } = string.Empty;
         public string CreatedByName { get; private set; } = string.Empty;
 
-        public void FromEntity(OrderItem model)
+        public OrderItemViewModel(OrderItem model)
         {   
             Guid = model.Guid;
             Quantity = model.Quantity;
