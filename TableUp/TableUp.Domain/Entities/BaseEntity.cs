@@ -15,9 +15,15 @@ namespace TableUp.Domain.Entities
         public EStatus Status { get; private set; }
 
         public Guid CreatedByGuid { get; private set; }
-        public User CreatedBy { get; private set; }
+        public User? CreatedBy { get; private set; }
         public Guid UpdatedByGuid { get; private set; }
-        public User UpdatedBy { get; private set; }
+        public User? UpdatedBy { get; private set; }
+
+        public void Deactivate(Guid userGuid)
+        {
+            Status = EStatus.Inactive;
+            SetUpdated(userGuid);
+        }
 
         public void Deactivate()
         {
@@ -25,10 +31,10 @@ namespace TableUp.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
-        public void Activate()
+        public void Activate(Guid userGuid)
         {
             Status = EStatus.Active;
-            UpdatedAt = DateTime.UtcNow;
+            SetUpdated(userGuid);
         }
 
         public void SetUpdated(Guid userGuid)

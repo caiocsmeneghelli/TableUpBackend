@@ -23,5 +23,11 @@ namespace TableUp.Domain.Entities
         public Guid OrderBillGuid { get; private set; }
         public OrderBill OrderBill { get; private set; }
         public EStatusOrderItem StatusOrderItem { get; private set; }
+
+        public void CompleteOrderItem(Guid userGuid)
+        {
+            StatusOrderItem = EStatusOrderItem.Completd;
+            SetUpdated(userGuid);
+        }
     }
 }
