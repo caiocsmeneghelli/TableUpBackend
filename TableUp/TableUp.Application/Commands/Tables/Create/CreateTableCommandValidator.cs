@@ -18,12 +18,21 @@ namespace TableUp.Application.Commands.Tables.Create
 
             RuleFor(x => x.RestaurantGuid)
                 .NotEmpty().WithMessage("O identificador do restaurante é obrigatório.");
+
+            RuleFor(x => x.RestaurantGuid)
+                .MustAsync(RestaurantGuidMustExistAndActive).WithMessage("Restaurante não encontrado ou inativo.");        
         }
 
         private async Task<bool> TableNumberMustBeUnique(string tableNumber, CancellationToken cancellationToken)
         {
             var tableExists = await _tableRepository.GetByNumberAsync(tableNumber);
             return tableExists == null;
+        }
+
+        private async Task<bool> RestaurantGuidMustExistAndActive(Guid restaurantGuid, CancellationToken cancellationToken)
+        {
+            var restaurantExists = await _tableRepository.GetByRestaurantGuidAsync(restaurantGuid);
+            return restaurantExists != null && restaurantExists.IsActive;
         }
     }
 }

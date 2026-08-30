@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.Restaurants.Create;
+using TableUp.Application.Commands.Restaurants.Inactive;
 using TableUp.Application.Common;
 using TableUp.Application.Queries.Restaurants.GetAll;
 
@@ -55,6 +56,18 @@ namespace TableUp.API.Controllers
             //        new { id = result.Value },        // Rota com o id do recurso criado
             //        result                      // Corpo da resposta (pode ser o próprio objeto ou apenas o id)
             //    );
+        }
+
+        [HttpDelete("{guid}")]
+        [Authorize]
+        public async Task<IActionResult> Inactive(Guid guid)
+        {
+            var command = new InactiveRestaurantCommand { Guid = guid };
+            Result result = await _mediator.Send(command);
+
+            if (result.IsFailure) { return NotFound(result); }
+
+            return NoContent();
         }
     }
 }
