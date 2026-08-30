@@ -13,6 +13,8 @@ namespace TableUp.Application.ViewModels.Tables
         public string TableNumber { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public string CreatedBy { get; private set; }
+        public string RestaurantName { get; private set; }
+        public Guid RestaurantGuid { get; private set; }
 
         public TableViewModel(Table table)
         {
@@ -20,6 +22,8 @@ namespace TableUp.Application.ViewModels.Tables
             TableNumber = table.Number;
             CreatedAt = table.CreatedAt;
             CreatedBy = table.CreatedBy.Username;
+            RestaurantName = table.Restaurant.Name;
+            RestaurantGuid = table.Restaurant.Guid;
         }
     }
 }

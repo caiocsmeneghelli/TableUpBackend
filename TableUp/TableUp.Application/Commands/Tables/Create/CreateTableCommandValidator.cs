@@ -6,9 +6,11 @@ namespace TableUp.Application.Commands.Tables.Create
     public class CreateTableCommandValidator : AbstractValidator<CreateTableCommand>
     {
         private readonly ITableRepository _tableRepository;
-        public CreateTableCommandValidator(ITableRepository tableRepository)
+        private readonly IRestaurantRepository _restaurantRepository;
+        public CreateTableCommandValidator(ITableRepository tableRepository, IRestaurantRepository restaurantRepository)
         {
             _tableRepository = tableRepository;
+            _restaurantRepository = restaurantRepository;
 
             RuleFor(x => x.TableNumber)
                 .NotEmpty().WithMessage("O número da mesa é obrigatório.")
@@ -31,8 +33,8 @@ namespace TableUp.Application.Commands.Tables.Create
 
         private async Task<bool> RestaurantGuidMustExistAndActive(Guid restaurantGuid, CancellationToken cancellationToken)
         {
-            var restaurantExists = await _tableRepository.GetByRestaurantGuidAsync(restaurantGuid);
-            return restaurantExists != null && restaurantExists.IsActive;
+            var restaurantExists = await _restaurantRepository.GetByIdAsync(restaurantGuid);
+            return restaurantExists != null && restaurantExists.Status == Domain.Enums.EStatus.Active;
         }
     }
 }

@@ -40,14 +40,18 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         public async Task<List<Table>> ListAllAsync(bool active)
         {
             // Add apenas o createdBy para viewModel
+            // Add informacoes de restaurante para viewModel
+            var query = _dbContext.Tables
+                .Include(reg => reg.CreatedBy)
+                .Include(reg => reg.Restaurant)
+                .AsQueryable();
             if (active)
-                return await _dbContext.Tables
+                return await query
                     .Where(reg => reg.Status == EStatus.Active)
-                    .Include(reg => reg.CreatedBy)
+                    .Where(reg => reg.Restaurant.Status == EStatus.Active)
                     .ToListAsync();
 
-            return await _dbContext.Tables
-                .Include(reg => reg.CreatedBy)
+            return await query
                 .ToListAsync();
         }
 
