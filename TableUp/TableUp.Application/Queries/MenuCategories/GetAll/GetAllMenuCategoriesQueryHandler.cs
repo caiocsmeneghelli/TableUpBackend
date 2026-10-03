@@ -12,13 +12,12 @@ namespace TableUp.Application.Queries.MenuCategories.GetAll
             _menuCategoryRepository = menuCategoryRepository;
         }
 
-        public Task<List<MenuCategoryViewModel>> Handle(GetAllMenuCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<List<MenuCategoryViewModel>> Handle(GetAllMenuCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var categories = _menuCategoryRepository.ListAllAsync(false);
-            var viewModels = categories.Result
-                .Select(c => new MenuCategoryViewModel(c.Guid, c.Name, c.Status, c.Restaurant))
+            var categories = await _menuCategoryRepository.ListAllAsync(true);
+            return categories
+                .Select(c => new MenuCategoryViewModel(c))
                 .ToList();
-            return Task.FromResult(viewModels);
         }
     }
 }

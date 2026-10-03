@@ -8,7 +8,7 @@ namespace TableUp.Application.Commands.MenuItems.Create
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public decimal Price { get; set; }
+        public decimal Value { get; set; }
         public Guid CategoryGuid { get; set; }
         public Guid UserGuid { get; set; }
 
@@ -18,7 +18,7 @@ namespace TableUp.Application.Commands.MenuItems.Create
                 Name,
                 Description,
                 CategoryGuid,
-                Price,
+                Value,
                 UserGuid
             );
         }

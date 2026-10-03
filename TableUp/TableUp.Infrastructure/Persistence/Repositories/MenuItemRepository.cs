@@ -33,7 +33,11 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public async Task<MenuItem?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.MenuItems.SingleOrDefaultAsync(reg => reg.Guid == id);
+            return await _dbContext.MenuItems
+                .Include(reg => reg.Category)
+                    .ThenInclude(c => c.Restaurant)
+                .Include(reg => reg.CreatedBy)
+                .SingleOrDefaultAsync(reg => reg.Guid == id);
         }
 
         public async Task<List<MenuItem>> ListAllAsync(bool active)
@@ -43,13 +47,17 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 return await _dbContext.MenuItems.Where(c => c.Status == Domain.Enums.EStatus.Active)
                 .Where(c => c.Category.Status == Domain.Enums.EStatus.Active)
                 .Include(reg => reg.Category)
+                    .ThenInclude(c => c.Restaurant)
+                .Include(reg => reg.CreatedBy)
                 .AsNoTracking()
                 .ToListAsync();
             }
 
             return await _dbContext.MenuItems
                 .AsNoTracking()
-                .Include(reg =>  reg.Category)
+                .Include(reg => reg.Category)
+                    .ThenInclude(c => c.Restaurant)
+                .Include(reg => reg.CreatedBy)
                 .ToListAsync();
         }
 

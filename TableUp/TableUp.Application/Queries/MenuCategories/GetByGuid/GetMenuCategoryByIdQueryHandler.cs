@@ -20,8 +20,7 @@ namespace TableUp.Application.Queries.MenuCategories.GetByGuid
             {
                 return null;
             }
-            return new MenuCategoryViewModel(menuCategory.Guid, 
-                menuCategory.Name, menuCategory.Status, menuCategory.Restaurant);
+            return new MenuCategoryViewModel(menuCategory);
         }
     }
 }

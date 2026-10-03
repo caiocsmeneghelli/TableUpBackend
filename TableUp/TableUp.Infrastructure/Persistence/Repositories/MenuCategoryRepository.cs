@@ -31,6 +31,7 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         {
             var category = await _dbContext.MenuCategories
                 .Include(c => c.Restaurant)
+                .Include(c => c.CreatedBy)
                 .FirstOrDefaultAsync(c => c.Guid == id);
             return category;
         }
@@ -43,12 +44,14 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 return await _dbContext.MenuCategories
                     .Where(c => c.Status == Domain.Enums.EStatus.Active)
                     .Include(c => c.Restaurant)
+                    .Include(c => c.CreatedBy)
                     .AsNoTracking()
                     .ToListAsync();
             }
 
             return await _dbContext.MenuCategories
                 .Include(c => c.Restaurant)
+                .Include(c => c.CreatedBy)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -63,6 +66,18 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             return await _dbContext.MenuCategories
                 .Where(c => c.RestaurantGuid == restaurantGuid && c.Status == Domain.Enums.EStatus.Active)
                 .ToListAsync();
+        }
+
+        public async Task<MenuCategory?> GetByNameAsync(string name, Guid restaurantGuid)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            return await _dbContext.MenuCategories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == name.Trim().ToLower()
+                    && c.RestaurantGuid == restaurantGuid
+                    && c.Status == Domain.Enums.EStatus.Active);
         }
     }
 }

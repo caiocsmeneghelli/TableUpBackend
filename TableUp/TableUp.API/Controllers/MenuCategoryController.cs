@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.MenuCategories.Create;
-using TableUp.Application.Commands.MenuCategories.Delete;
+using TableUp.Application.Commands.MenuCategories.Inactive;
+using TableUp.Application.Commands.MenuCategories.Update;
 using TableUp.Application.Common;
 using TableUp.Application.Queries.MenuCategories.GetAll;
 using TableUp.Application.Queries.MenuCategories.GetByGuid;
+using TableUp.Application.Queries.MenuCategories.GetByRestaurant;
 using TableUp.Application.ViewModels.MenuCategories;
 
 namespace TableUp.API.Controllers
@@ -25,6 +27,14 @@ namespace TableUp.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var query = new GetAllMenuCategoriesQuery();
+            var categories = await _mediator.Send(query);
+            return Ok(categories);
+        }
+
+        [HttpGet("restaurant/{restaurantGuid}")]
+        public async Task<IActionResult> GetByRestaurant(Guid restaurantGuid)
+        {
+            var query = new GetMenuCategoriesByRestaurantQuery { RestaurantGuid = restaurantGuid };
             var categories = await _mediator.Send(query);
             return Ok(categories);
         }
@@ -50,11 +60,21 @@ namespace TableUp.API.Controllers
             return CreatedAtAction(nameof(GetByGuid), new { id = result.Value }, result);
         }
 
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateMenuCategoryCommand command)
+        {
+            command.Guid = id;
+            Result result = await _mediator.Send(command);
+            if (result.IsFailure) { return BadRequest(result); }
+            return Ok(result);
+        }
+
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Inactive(Guid id)
         {
-            DeleteMenuCategoryCommand command = new DeleteMenuCategoryCommand(id);
+            var command = new InactiveMenuCategoryCommand { Guid = id };
             Result result = await _mediator.Send(command);
 
             if (result.IsFailure) { return NotFound(result); }
