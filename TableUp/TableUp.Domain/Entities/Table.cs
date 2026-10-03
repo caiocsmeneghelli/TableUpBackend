@@ -16,5 +16,11 @@
             TableToken = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
             SetCreated(userGuid);
         }
+
+        public void Update(string number, Guid userGuid)
+        {
+            Number = number;
+            SetUpdated(userGuid);
+        }
     }
 }
