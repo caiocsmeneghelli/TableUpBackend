@@ -18,6 +18,13 @@ namespace TableUp.Application.Commands.OrderBills.Create
                     .MaximumLength(3).WithMessage("Table number cannot exceed 3 characters.")
                     .Matches(@"^\d+$").WithMessage("O campo Código deve conter apenas números.");
             });
+
+            // Busca por TableNumber exige o restaurante, pois o número só é único por restaurante
+            When(x => x.TableGuid == Guid.Empty, () =>
+            {
+                RuleFor(x => x.RestaurantGuid)
+                    .NotEmpty().WithMessage("O identificador do restaurante é obrigatório.");
+            });
         }
     }
 }

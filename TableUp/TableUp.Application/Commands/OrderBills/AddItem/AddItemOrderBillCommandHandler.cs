@@ -57,10 +57,10 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
             {
                 await _unitOfWork.BeginTransactionAsync();
                 // buscar orderBill, se não existir, criar um novo
-                var orderBill = await _orderBillRepository.GetByTableNumberAsync(request.TableNumber);
+                var orderBill = await _orderBillRepository.GetByTableNumberAsync(request.TableNumber, request.RestaurantGuid);
                 if (orderBill is null)
                 {
-                    Table? table = await _tableRepository.GetByNumberAsync(request.TableNumber);
+                    Table? table = await _tableRepository.GetByNumberAsync(request.TableNumber, request.RestaurantGuid);
                     if (table is null)
                     {
                         return Result.Failure($"Table with number {request.TableNumber} not found.");

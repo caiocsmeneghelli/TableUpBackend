@@ -40,12 +40,21 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 .SingleOrDefaultAsync(ob => ob.Guid == id);
         }
 
-        public Task<OrderBill?> GetByTableNumberAsync(string tableNumber)
+        public Task<OrderBill?> GetByTableNumberAsync(string tableNumber, Guid restaurantGuid)
         {
             return _dbContext.OrderBills
                 .Include(reg => reg.BillItems)
                     .ThenInclude(oi => oi.MenuItem)
-                .Where(ob => ob.Table.Number == tableNumber && ob.Status == EStatus.Active)
+                .Where(ob => ob.Table.Number == tableNumber && ob.Table.RestaurantGuid == restaurantGuid && ob.Status == EStatus.Active)
+                .SingleOrDefaultAsync();
+        }
+
+        public Task<OrderBill?> GetActiveByTableGuidAsync(Guid tableGuid)
+        {
+            return _dbContext.OrderBills
+                .Include(reg => reg.BillItems)
+                    .ThenInclude(oi => oi.MenuItem)
+                .Where(ob => ob.TableGuid == tableGuid && ob.Status == EStatus.Active)
                 .SingleOrDefaultAsync();
         }
 

@@ -43,7 +43,7 @@ namespace TableUp.Application.Commands.OrderBills.Create
             // busca table
             var table = request.TableGuid != Guid.Empty
                 ? await _tableRepository.GetByIdAsync(request.TableGuid)
-                : await _tableRepository.GetByNumberAsync(request.TableNumber);
+                : await _tableRepository.GetByNumberAsync(request.TableNumber, request.RestaurantGuid);
 
             if(table == null)
             {

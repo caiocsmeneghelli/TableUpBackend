@@ -7,6 +7,7 @@ namespace TableUp.Application.Commands.Tables.Update
     {
         public Guid Guid { get; set; }
         public string TableNumber { get; set; } = string.Empty;
+        public Guid RestaurantGuid { get; set; }
 
         public void Normalize()
         {

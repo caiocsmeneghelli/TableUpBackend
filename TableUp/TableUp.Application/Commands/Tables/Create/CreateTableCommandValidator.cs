@@ -16,7 +16,7 @@ namespace TableUp.Application.Commands.Tables.Create
                 .NotEmpty().WithMessage("O número da mesa é obrigatório.")
                 .Length(1, 3).WithMessage("O número da mesa deve conter entre 1 e 3 caracteres.")
                 .Matches(@"^\d+$").WithMessage("O número da mesa deve conter apenas dígitos.")
-                .MustAsync(TableNumberMustBeUnique).WithMessage("Mesa {PropertyValue} já existe.");
+                .MustAsync((command, _, cancellationToken) => TableNumberMustBeUnique(command, cancellationToken)).WithMessage("Mesa {PropertyValue} já existe.");
 
             RuleFor(x => x.RestaurantGuid)
                 .NotEmpty().WithMessage("O identificador do restaurante é obrigatório.");
@@ -25,9 +25,9 @@ namespace TableUp.Application.Commands.Tables.Create
                 .MustAsync(RestaurantGuidMustExistAndActive).WithMessage("Restaurante não encontrado ou inativo.");        
         }
 
-        private async Task<bool> TableNumberMustBeUnique(string tableNumber, CancellationToken cancellationToken)
+        private async Task<bool> TableNumberMustBeUnique(CreateTableCommand command, CancellationToken cancellationToken)
         {
-            var tableExists = await _tableRepository.GetByNumberAsync(tableNumber);
+            var tableExists = await _tableRepository.GetByNumberAsync(command.TableNumber, command.RestaurantGuid);
             return tableExists == null;
         }
 

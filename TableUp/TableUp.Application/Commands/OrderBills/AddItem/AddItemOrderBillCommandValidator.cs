@@ -16,6 +16,9 @@ namespace TableUp.Application.Commands.OrderBills.AddItem
                 .MaximumLength(3).WithMessage("Table number cannot exceed 3 characters.")
                 .Matches(@"^\d+$").WithMessage("Table number must be numeric.");
 
+            RuleFor(reg => reg.RestaurantGuid)
+                .NotEmpty().WithMessage("Restaurant GUID is required.");
+
             RuleFor(reg => reg.Items)
                 .NotNull().WithMessage("Items list cannot be null.")
                 .NotEmpty().WithMessage("At least one item must be provided.");
