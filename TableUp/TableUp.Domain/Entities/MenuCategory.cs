@@ -18,5 +18,11 @@ namespace TableUp.Domain.Entities
             SetCreated(userGuid);
             RestaurantGuid = restaurantGuid;
         }
+
+        public void Update(string name, Guid userGuid)
+        {
+            Name = name;
+            SetUpdated(userGuid);
+        }
     }
 }
