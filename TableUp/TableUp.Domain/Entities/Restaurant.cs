@@ -29,5 +29,15 @@ namespace TableUp.Domain.Entities
         {
             ImageUrl = imageUrl;
         }
+
+        public void Update(string name, string slug, string email, string description, Guid userGuid)
+        {
+            Name = name;
+            Slug = slug;
+            Email = email;
+            Description = description;
+
+            SetUpdated(userGuid);
+        }
     }
 }

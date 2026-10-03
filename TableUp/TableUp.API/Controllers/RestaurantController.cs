@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TableUp.Application.Commands.Restaurants.Create;
 using TableUp.Application.Commands.Restaurants.Inactive;
+using TableUp.Application.Commands.Restaurants.Update;
 using TableUp.Application.Common;
 using TableUp.Application.Queries.Restaurants.GetAll;
 
@@ -56,6 +57,16 @@ namespace TableUp.API.Controllers
             //        new { id = result.Value },        // Rota com o id do recurso criado
             //        result                      // Corpo da resposta (pode ser o próprio objeto ou apenas o id)
             //    );
+        }
+
+        [HttpPut("{guid}")]
+        [Authorize]
+        public async Task<IActionResult> Update(Guid guid, [FromBody] UpdateRestaurantCommand command)
+        {
+            command.Guid = guid;
+            Result result = await _mediator.Send(command);
+            if (result.IsFailure) { return BadRequest(result); }
+            return Ok(result);
         }
 
         [HttpDelete("{guid}")]
