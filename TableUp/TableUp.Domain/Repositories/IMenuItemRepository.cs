@@ -9,5 +9,6 @@ namespace TableUp.Domain.Repositories
 {
     public interface IMenuItemRepository : IRepository<MenuItem>
     {
+        Task<List<MenuItem>> ListActiveByCategoriesAsync(IEnumerable<Guid> categoryGuids);
     }
 }

@@ -28,7 +28,7 @@ namespace TableUp.Domain.Entities
         private void SetTable(Table table)
         {
             if (table == null)
-                throw new ArgumentNullException(nameof(table), "A mesa não pode ser nula.");
+                throw new ArgumentNullException(nameof(table), "A mesa nï¿½o pode ser nula.");
             
             TableGuid = table.Guid;
         }
@@ -36,13 +36,13 @@ namespace TableUp.Domain.Entities
         public void CloseBill(Guid userGuid)
         {
             StatusOrderBill = EStatusOrderBill.Closed;
-            Deactivate(userGuid);
+            base.Deactivate(userGuid);
         }
 
         public void Deactivate(Guid userGuid)
         {
             StatusOrderBill = EStatusOrderBill.Canceled;
-            Deactivate(userGuid);
+            base.Deactivate(userGuid);
         }
     }
 }

@@ -57,5 +57,12 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         {
            await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<MenuItem>> ListActiveByCategoriesAsync(IEnumerable<Guid> categoryGuids)
+        {
+            return await _dbContext.MenuItems
+                .Where(i => categoryGuids.Contains(i.CategoryGuid) && i.Status == Domain.Enums.EStatus.Active)
+                .ToListAsync();
+        }
     }
 }

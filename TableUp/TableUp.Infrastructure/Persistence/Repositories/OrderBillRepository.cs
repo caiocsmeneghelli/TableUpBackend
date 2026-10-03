@@ -83,5 +83,12 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         {
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<OrderBill>> ListActiveByTablesAsync(IEnumerable<Guid> tableGuids)
+        {
+            return await _dbContext.OrderBills
+                .Where(ob => tableGuids.Contains(ob.TableGuid) && ob.Status == EStatus.Active)
+                .ToListAsync();
+        }
     }
 }

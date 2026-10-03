@@ -68,5 +68,12 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Number == tableNumber);
         }
+
+        public async Task<List<Table>> ListActiveByRestaurantAsync(Guid restaurantGuid)
+        {
+            return await _dbContext.Tables
+                .Where(t => t.RestaurantGuid == restaurantGuid && t.Status == EStatus.Active)
+                .ToListAsync();
+        }
     }
 }
