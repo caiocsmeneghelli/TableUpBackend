@@ -59,14 +59,15 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         {
             await _dbContext.SaveChangesAsync();
         }
-        public async Task<Table?> GetByNumberAsync(string tableNumber)
+        
+        public async Task<Table?> GetByNumberAsync(string tableNumber, Guid restaurantGuid)
         {
             if (string.IsNullOrWhiteSpace(tableNumber))
                 return null;
 
             return await _dbContext.Tables
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Number == tableNumber);
+                .FirstOrDefaultAsync(t => t.Number == tableNumber && t.RestaurantGuid == restaurantGuid);
         }
 
         public async Task<List<Table>> ListActiveByRestaurantAsync(Guid restaurantGuid)

@@ -7,7 +7,7 @@ using TableUp.Application.Commands.OrderBills.Close;
 using TableUp.Application.Commands.OrderBills.Create;
 using TableUp.Application.Common;
 using TableUp.Application.Queries.OrderBills.GetByGuid;
-using TableUp.Application.Queries.OrderBills.GetByTableNumber;
+using TableUp.Application.Queries.OrderBills.GetByTableGuid;
 using TableUp.Application.Queries.OrderBills.GetToday;
 using TableUp.Application.ViewModels.OrderBills;
 using TableUp.Domain.Enums;
@@ -50,10 +50,10 @@ namespace TableUp.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/api/tables/{table-number}/order-bills")]
-        public async Task<IActionResult> GetOrderBillByDate(string tableNumber)
+        [HttpGet("/api/tables/{tableGuid}/order-bills")]
+        public async Task<IActionResult> GetOrderBillByTableGuid(Guid tableGuid)
         {
-            var query = new GetOrderBillByTableNumberQuery() { TableNumber = tableNumber };
+            var query = new GetOrderBillByTableGuidQuery() { TableGuid = tableGuid };
             var result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -89,6 +89,7 @@ namespace TableUp.API.Controllers
         {
             AddItemOrderBillCommand command = new AddItemOrderBillCommand();
             command.TableNumber = tableNumber;
+            command.RestaurantGuid = request.RestaurantGuid;
             command.Items = request.Items;
 
             Result result = await _mediator.Send(command);

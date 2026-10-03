@@ -12,5 +12,6 @@ namespace TableUp.Application.Commands.OrderBills.Create
     {
         public string TableNumber { get; set; } = string.Empty;
         public Guid TableGuid { get; set; }
+        public Guid RestaurantGuid { get; set; }
     }
 }
