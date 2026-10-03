@@ -36,7 +36,7 @@ namespace TableUp.Application.Commands.MenuItems.Update
                 if (itemMenu == null) return Result.Failure("Menu item não encontrado") ;
 
                 var itemCategory = await _menuCategoryRepository.GetByIdAsync(request.CategoryGuid);
-                if (itemCategory == null || itemCategory.Status != Domain.Enums.EStatus.Active) return Result.Failure("Menu item desativado");
+                if (itemCategory == null || itemCategory.Status != Domain.Enums.EStatus.Active) return Result.Failure("Categoria não encontrada ou inativa.");
 
                 Guid userGuid = _currentUserService.UserId;
 
