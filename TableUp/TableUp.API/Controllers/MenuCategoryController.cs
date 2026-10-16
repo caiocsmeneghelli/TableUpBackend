@@ -8,6 +8,7 @@ using TableUp.Application.Common;
 using TableUp.Application.Queries.MenuCategories.GetAll;
 using TableUp.Application.Queries.MenuCategories.GetByGuid;
 using TableUp.Application.Queries.MenuCategories.GetByRestaurant;
+using TableUp.Application.Queries.MenuCategories.GetMenuByRestaurant;
 using TableUp.Application.ViewModels.MenuCategories;
 
 namespace TableUp.API.Controllers
@@ -37,6 +38,14 @@ namespace TableUp.API.Controllers
             var query = new GetMenuCategoriesByRestaurantQuery { RestaurantGuid = restaurantGuid };
             var categories = await _mediator.Send(query);
             return Ok(categories);
+        }
+
+        [HttpGet("restaurant/{restaurantGuid}/menu")]
+        public async Task<IActionResult> GetMenuByRestaurant(Guid restaurantGuid)
+        {
+            var query = new GetMenuByRestaurantQuery { RestaurantGuid = restaurantGuid };
+            var menu = await _mediator.Send(query);
+            return Ok(menu);
         }
 
         [HttpGet("{id}")]
