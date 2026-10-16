@@ -7,6 +7,7 @@ using TableUp.Application.Commands.Tables.Inactive;
 using TableUp.Application.Commands.Tables.Update;
 using TableUp.Application.Common;
 using TableUp.Application.Queries.Tables.GetAll;
+using TableUp.Application.Queries.Tables.GetByGuid;
 using TableUp.Application.ViewModels.Tables;
 
 namespace TableUp.API.Controllers
@@ -37,6 +38,16 @@ namespace TableUp.API.Controllers
         {
             GetAllTablesQuery query = new GetAllTablesQuery();
             List<TableViewModel> vwModel = await _mediatr.Send(query);
+            return Ok(vwModel);
+        }
+
+        [HttpGet("{guid}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByGuid(Guid guid)
+        {
+            GetTableByGuidQuery query = new GetTableByGuidQuery(guid);
+            TableSummaryViewModel? vwModel = await _mediatr.Send(query);
+            if (vwModel == null) { return NotFound(); }
             return Ok(vwModel);
         }
 
