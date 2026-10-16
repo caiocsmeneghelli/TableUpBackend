@@ -6,5 +6,6 @@ namespace TableUp.Domain.Repositories
     {
         Task<Table?> GetByNumberAsync(string tableNumber, Guid restaurantGuid);
         Task<List<Table>> ListActiveByRestaurantAsync(Guid restaurantGuid);
+        Task<Table?> GetActiveWithRestaurantAsync(Guid guid);
     }
 }
