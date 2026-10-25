@@ -35,6 +35,8 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         public Task<OrderBill?> GetByIdAsync(Guid id)
         {
             return _dbContext.OrderBills
+                .Include(reg => reg.Table)
+                    .ThenInclude(t => t.Restaurant)
                 .Include(reg => reg.CreatedBy)
                 .Include(reg => reg.UpdatedBy)
                 .Include(reg => reg.BillItems)

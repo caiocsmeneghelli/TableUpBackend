@@ -24,6 +24,9 @@ namespace TableUp.Domain.Entities
         public OrderBill OrderBill { get; private set; }
         public EStatusOrderItem StatusOrderItem { get; private set; }
 
+        public bool CanComplete => StatusOrderItem == EStatusOrderItem.Pending;
+        public bool CanCancel => StatusOrderItem != EStatusOrderItem.Canceled;
+
         public void CompleteOrderItem(Guid userGuid)
         {
             StatusOrderItem = EStatusOrderItem.Completd;

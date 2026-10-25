@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TableUp.Application.Commands.OrderItems.ChangeStatus;
+using TableUp.Application.Common;
 using TableUp.Application.Queries.OrderItems.GetAll;
 using TableUp.Application.Queries.OrderItems.GetByGuid;
+using TableUp.Domain.Enums;
 
 namespace TableUp.API.Controllers
 {
@@ -46,12 +49,24 @@ namespace TableUp.API.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
+        [HttpPut("{guid}/complete")]
         [Authorize]
-        public async Task<IActionResult> Complete()
+        public async Task<IActionResult> Complete(Guid guid)
         {
-            // implement the logic to complete order item
-            return Ok();
+            ChangeOrderItemStatusCommand command = new ChangeOrderItemStatusCommand(guid, EStatusOrderItem.Completd);
+            Result result = await _mediator.Send(command);
+            if (result.IsFailure) { return BadRequest(result); }
+            return Ok(result);
+        }
+
+        [HttpPut("{guid}/cancel")]
+        [Authorize]
+        public async Task<IActionResult> Cancel(Guid guid)
+        {
+            ChangeOrderItemStatusCommand command = new ChangeOrderItemStatusCommand(guid, EStatusOrderItem.Canceled);
+            Result result = await _mediator.Send(command);
+            if (result.IsFailure) { return BadRequest(result); }
+            return Ok(result);
         }
     }
 }
