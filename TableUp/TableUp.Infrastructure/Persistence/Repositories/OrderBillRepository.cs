@@ -52,6 +52,8 @@ namespace TableUp.Infrastructure.Persistence.Repositories
         public Task<OrderBill?> GetActiveByTableGuidAsync(Guid tableGuid)
         {
             return _dbContext.OrderBills
+                .Include(reg => reg.Table)
+                .Include(reg => reg.CreatedBy)
                 .Include(reg => reg.BillItems)
                     .ThenInclude(oi => oi.MenuItem)
                 .Where(ob => ob.TableGuid == tableGuid && ob.Status == EStatus.Active)
