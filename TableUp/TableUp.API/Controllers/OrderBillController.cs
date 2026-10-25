@@ -29,7 +29,8 @@ namespace TableUp.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetTodayOrderBills()
         {
-            var query = new GetOrderBillByDateQuery() { DateTime = DateTime.UtcNow };
+            // Dia corrente no fuso do servidor; o repositório converte os limites para UTC
+            var query = new GetOrderBillByDateQuery() { DateTime = DateTime.Now };
             var result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -72,9 +73,24 @@ namespace TableUp.API.Controllers
         }
 
         [HttpPut("{guid}/cancel")]
+        [Authorize]
         public async Task<IActionResult> CancelOrderBill(Guid guid)
         {
             CloseCancelOrderBillCommand command = new CloseCancelOrderBillCommand(guid, EStatusOrderBill.Canceled);
+            Result result = await _mediator.Send(command);
+            if (result.IsFailure)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("{guid}/pay")]
+        [Authorize]
+        public async Task<IActionResult> PayOrderBill(Guid guid)
+        {
+            CloseCancelOrderBillCommand command = new CloseCancelOrderBillCommand(guid, EStatusOrderBill.Paid);
             Result result = await _mediator.Send(command);
             if (result.IsFailure)
             {

@@ -36,13 +36,14 @@ namespace TableUp.Domain.Entities
             TableGuid = table.Guid;
         }
 
+        public bool CanClose => StatusOrderBill == EStatusOrderBill.Opened;
+        public bool CanCancel => StatusOrderBill is EStatusOrderBill.Opened or EStatusOrderBill.Closed;
+        public bool CanPay => StatusOrderBill == EStatusOrderBill.Closed;
+
         public void CloseBill(Guid userGuid)
         {
             // Ao finalizar a conta, os itens ainda em preparo são cancelados
-            foreach (var item in BillItems?.Where(item => item.StatusOrderItem == EStatusOrderItem.Pending) ?? [])
-            {
-                item.CancelOrderItem(userGuid);
-            }
+            CancelPendingItems(userGuid);
 
             StatusOrderBill = EStatusOrderBill.Closed;
             base.Deactivate(userGuid);
@@ -50,8 +51,25 @@ namespace TableUp.Domain.Entities
 
         public void Deactivate(Guid userGuid)
         {
+            // Conta cancelada não deve deixar itens pendentes na cozinha
+            CancelPendingItems(userGuid);
+
             StatusOrderBill = EStatusOrderBill.Canceled;
             base.Deactivate(userGuid);
+        }
+
+        public void Pay(Guid userGuid)
+        {
+            StatusOrderBill = EStatusOrderBill.Paid;
+            SetUpdated(userGuid);
+        }
+
+        private void CancelPendingItems(Guid userGuid)
+        {
+            foreach (var item in BillItems?.Where(item => item.StatusOrderItem == EStatusOrderItem.Pending) ?? [])
+            {
+                item.CancelOrderItem(userGuid);
+            }
         }
     }
 }

@@ -80,15 +80,17 @@ namespace TableUp.Infrastructure.Persistence.Repositories
 
         public async Task<List<OrderBill>> ListByDateAsync(DateTime dateTime)
         {
-            var startDate = dateTime.Date;
+            var startDate = dateTime.Date.ToUniversalTime();
             var endDate = startDate.AddDays(1);
             return await _dbContext.OrderBills
                 .Where(ob => ob.CreatedAt >= startDate && ob.CreatedAt < endDate)
                 .Include(reg => reg.CreatedBy)
                 .Include(reg => reg.UpdatedBy)
                 .Include(reg => reg.Table)
+                    .ThenInclude(t => t.Restaurant)
                 .Include(reg => reg.BillItems)
                     .ThenInclude(oi => oi.MenuItem)
+                .OrderByDescending(ob => ob.UpdatedAt)
                 .ToListAsync();
         }
 

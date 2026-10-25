@@ -12,7 +12,9 @@ namespace TableUp.Application.ViewModels.OrderBills
     {
         public Guid GuidOrderBill { get; private set; }
         public string TableNumber { get; private set; } = string.Empty;
+        public string RestaurantName { get; private set; } = string.Empty;
         public DateTime CreatedAt { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
         public string CratedBy { get; private set; } = string.Empty;
 
         public EStatusOrderBill StatusOrderBill { get; private set; }
@@ -23,7 +25,9 @@ namespace TableUp.Application.ViewModels.OrderBills
         {
             GuidOrderBill = model.Guid;
             TableNumber = model.Table.Number;
+            RestaurantName = model.Table.Restaurant?.Name ?? string.Empty;
             CreatedAt = model.CreatedAt.ToLocalTime();
+            UpdatedAt = model.UpdatedAt.ToLocalTime();
             CratedBy = model.CreatedBy.Name;
             StatusOrderBill = model.StatusOrderBill;
             Total = model.Total;
