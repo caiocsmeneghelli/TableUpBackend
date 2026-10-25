@@ -66,6 +66,7 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 return null;
 
             return await _dbContext.Tables
+                .Where(t => t.Status == EStatus.Active)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Number == tableNumber && t.RestaurantGuid == restaurantGuid);
         }
@@ -77,13 +78,19 @@ namespace TableUp.Infrastructure.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Table?> GetActiveWithRestaurantAsync(Guid guid)
+        public async Task<Table?> GetActiveWithRestaurantByTokenAsync(string tableToken)
         {
+            if (string.IsNullOrWhiteSpace(tableToken))
+                return null;
+
+            // O token é gerado em maiúsculas; normaliza para aceitar links digitados em minúsculas
+            var normalizedToken = tableToken.Trim().ToUpperInvariant();
+
             return await _dbContext.Tables
                 .Include(t => t.Restaurant)
                 .AsNoTracking()
                 .Where(t => t.Status == EStatus.Active && t.Restaurant.Status == EStatus.Active)
-                .SingleOrDefaultAsync(t => t.Guid == guid);
+                .SingleOrDefaultAsync(t => t.TableToken == normalizedToken);
         }
     }
 }

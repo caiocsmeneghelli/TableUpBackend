@@ -7,7 +7,7 @@ using TableUp.Application.Commands.Tables.Inactive;
 using TableUp.Application.Commands.Tables.Update;
 using TableUp.Application.Common;
 using TableUp.Application.Queries.Tables.GetAll;
-using TableUp.Application.Queries.Tables.GetByGuid;
+using TableUp.Application.Queries.Tables.GetByToken;
 using TableUp.Application.ViewModels.Tables;
 
 namespace TableUp.API.Controllers
@@ -41,11 +41,11 @@ namespace TableUp.API.Controllers
             return Ok(vwModel);
         }
 
-        [HttpGet("{guid}")]
+        [HttpGet("{tableToken}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetByGuid(Guid guid)
+        public async Task<IActionResult> GetByToken(string tableToken)
         {
-            GetTableByGuidQuery query = new GetTableByGuidQuery(guid);
+            GetTableByTokenQuery query = new GetTableByTokenQuery(tableToken);
             TableSummaryViewModel? vwModel = await _mediatr.Send(query);
             if (vwModel == null) { return NotFound(); }
             return Ok(vwModel);

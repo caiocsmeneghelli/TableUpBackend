@@ -5,6 +5,7 @@ namespace TableUp.Application.ViewModels.Tables
     public class TableSummaryViewModel
     {
         public Guid TableGuid { get; private set; }
+        public string TableToken { get; private set; }
         public string TableNumber { get; private set; }
         public Guid RestaurantGuid { get; private set; }
         public string RestaurantName { get; private set; }
@@ -12,6 +13,7 @@ namespace TableUp.Application.ViewModels.Tables
         public TableSummaryViewModel(Table table)
         {
             TableGuid = table.Guid;
+            TableToken = table.TableToken;
             TableNumber = table.Number;
             RestaurantGuid = table.Restaurant.Guid;
             RestaurantName = table.Restaurant.Name;
