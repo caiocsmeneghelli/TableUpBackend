@@ -23,7 +23,10 @@ namespace TableUp.Domain.Entities
         public Table Table { get; private set; }
         public Guid TableGuid { get; private set; }
 
-        public decimal Total => BillItems?.Sum(item => item.Quantity * (item.MenuItem?.Value ?? 0m)) ?? 0m;
+        // Itens cancelados não entram no valor da conta
+        public decimal Total => BillItems?
+            .Where(item => item.StatusOrderItem != EStatusOrderItem.Canceled)
+            .Sum(item => item.Quantity * (item.MenuItem?.Value ?? 0m)) ?? 0m;
 
         private void SetTable(Table table)
         {
@@ -35,6 +38,12 @@ namespace TableUp.Domain.Entities
 
         public void CloseBill(Guid userGuid)
         {
+            // Ao finalizar a conta, os itens ainda em preparo são cancelados
+            foreach (var item in BillItems?.Where(item => item.StatusOrderItem == EStatusOrderItem.Pending) ?? [])
+            {
+                item.CancelOrderItem(userGuid);
+            }
+
             StatusOrderBill = EStatusOrderBill.Closed;
             base.Deactivate(userGuid);
         }

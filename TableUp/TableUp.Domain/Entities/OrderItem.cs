@@ -29,5 +29,11 @@ namespace TableUp.Domain.Entities
             StatusOrderItem = EStatusOrderItem.Completd;
             SetUpdated(userGuid);
         }
+
+        public void CancelOrderItem(Guid userGuid)
+        {
+            StatusOrderItem = EStatusOrderItem.Canceled;
+            SetUpdated(userGuid);
+        }
     }
 }

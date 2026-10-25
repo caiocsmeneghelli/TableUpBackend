@@ -29,6 +29,7 @@ namespace TableUp.Application.Commands.OrderBills.CloseCancel
         {
             OrderBill? orderBill = await _repository.GetByIdAsync(request.Guid);
             if (orderBill == null) { return Result.Failure("OrderBill não encontrado."); }
+            if (orderBill.StatusOrderBill != EStatusOrderBill.Opened) { return Result.Failure("OrderBill não está aberta."); }
 
             Guid userGuid = _currentUserService.UserId;
 

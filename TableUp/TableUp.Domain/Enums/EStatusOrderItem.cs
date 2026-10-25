@@ -3,6 +3,7 @@
     public enum EStatusOrderItem
     {
         Pending = 1,
-        Completd = 2
+        Completd = 2,
+        Canceled = 3
     }
 }

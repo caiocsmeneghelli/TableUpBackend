@@ -37,6 +37,8 @@ namespace TableUp.Infrastructure.Persistence.Repositories
             return _dbContext.OrderBills
                 .Include(reg => reg.CreatedBy)
                 .Include(reg => reg.UpdatedBy)
+                .Include(reg => reg.BillItems)
+                    .ThenInclude(oi => oi.MenuItem)
                 .SingleOrDefaultAsync(ob => ob.Guid == id);
         }
 
